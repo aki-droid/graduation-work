@@ -62,3 +62,7 @@ MVPリリース時
 - データベース PostgreSQL
 - デプロイ先 Render
 - 使用予定のGem 未定
+
+## 画面遷移図
+Figma：https://www.figma.com/design/u19qyobnEL8SB8Axt9i89C/%E5%8D%92%E6%A5%AD%E5%88%B6%E4%BD%9C?t=G9ti6h5f4b4ONIvm-1
+
