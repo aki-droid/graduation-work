@@ -66,3 +66,5 @@ MVPリリース時
 ## 画面遷移図
 Figma：https://www.figma.com/design/u19qyobnEL8SB8Axt9i89C/%E5%8D%92%E6%A5%AD%E5%88%B6%E4%BD%9C?t=G9ti6h5f4b4ONIvm-1
 
+### ER図
+![ER図]https://i.gyazo.com/a9dae53e846187d90a3d06dfe92b70c8.png
