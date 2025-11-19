@@ -1,0 +1,62 @@
+<div class="container mt-5">
+  <div class="alert alert-success" role="alert">
+    <h4 class="alert-heading">Bootstrap is working! 🎉</h4>
+    <p>レストラン検索アプリの準備が整いました。</p>
+    <hr>
+    <p class="mb-0">Rails <%= Rails.version %> と Ruby <%= RUBY_VERSION %> で動作しています。</p>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Bootstrap Card</h5>
+          <p class="card-text">Bootstrapのコンポーネントが正常に動作しています。</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">レストラン検索アプリ</h5>
+          <p class="card-text">これから素晴らしいアプリを作成していきます！</p>
+          <a href="#" class="btn btn-success">開始する</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">現在のシステム情報</h5>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">📊 <strong>Rails バージョン:</strong> <%= Rails.version %></li>
+          <li class="list-group-item">🔧 <strong>Ruby バージョン:</strong> <%= RUBY_DESCRIPTION %></li>
+          <li class="list-group-item">🌐 <strong>環境:</strong> <%= Rails.env %></li>
+          <li class="list-group-item">⏰ <strong>現在時刻:</strong> <%= Time.current %></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Issue #2 進行状況</h5>
+        <div class="progress mb-3">
+          <div class="progress-bar bg-success" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100">95%</div>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">✅ Bootstrap gem 追加・設定</li>
+          <li class="list-group-item">✅ bundle install 完了</li>
+          <li class="list-group-item">✅ MVC構造実装</li>
+          <li class="list-group-item">✅ ビューファイル作成</li>
+          <li class="list-group-item">🔧 Bootstrap動作確認 ← 最終確認中</li>
+          <li class="list-group-item">⏳ devise gem 追加・設定</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
