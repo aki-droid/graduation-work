@@ -1,0 +1,87 @@
+<!-- app/views/restaurants/search.html.erb -->
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="mb-4">
+        <i class="fas fa-search me-2"></i>検索結果
+      </h2>
+      
+      <!-- 検索条件の表示 -->
+      <% if params[:keyword].present? %>
+        <div class="alert alert-info">
+          <strong>検索キーワード:</strong> <%= params[:keyword] %>
+        </div>
+      <% end %>
+      
+      <!-- 検索結果の表示 -->
+      <% if @restaurants && @restaurants.any? %>
+        <div class="mb-3">
+          <span class="badge bg-primary">
+            <%= @restaurants.count %>件の店舗が見つかりました
+          </span>
+        </div>
+        
+        <div class="row">
+          <% @restaurants.each do |restaurant| %>
+            <div class="col-md-6 col-lg-4 mb-4">
+              <div class="card h-100">
+                <% if restaurant.image.present? %>
+                  <%= image_tag restaurant.image, class: "card-img-top", style: "height: 200px; object-fit: cover;" %>
+                <% else %>
+                  <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <i class="fas fa-utensils fa-3x text-muted"></i>
+                  </div>
+                <% end %>
+                
+                <div class="card-body">
+                  <h5 class="card-title"><%= restaurant.name %></h5>
+                  <p class="card-text">
+                    <small class="text-muted">
+                      <i class="fas fa-map-marker-alt me-1"></i>
+                      <%= restaurant.address %>
+                    </small>
+                  </p>
+                  <% if restaurant.description.present? %>
+                    <p class="card-text">
+                      <%= truncate(restaurant.description, length: 100) %>
+                    </p>
+                  <% end %>
+                </div>
+                
+                <div class="card-footer">
+                  <%= link_to "詳細を見る", restaurant_path(restaurant), 
+                      class: "btn btn-primary btn-sm" %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        
+      <% else %>
+        <!-- 検索結果が0件の場合 -->
+        <div class="text-center py-5">
+          <i class="fas fa-search fa-4x text-muted mb-3"></i>
+          <h4 class="text-muted">該当する店舗が見つかりませんでした</h4>
+          <p class="text-muted">
+            別のキーワードで検索してみてください
+          </p>
+          <%= link_to "トップページに戻る", root_path, 
+              class: "btn btn-outline-primary mt-3" %>
+        </div>
+      <% end %>
+      
+      <!-- 検索フォームの再表示 -->
+      <div class="mt-5 p-4 bg-light rounded">
+        <h5>再検索</h5>
+        <%= form_with url: search_restaurants_path, method: :get, 
+            class: "d-flex", local: true do |f| %>
+          <%= f.text_field :keyword, 
+              placeholder: "店舗名、住所、料理ジャンルで検索", 
+              value: params[:keyword],
+              class: "form-control me-2" %>
+          <%= f.submit "検索", class: "btn btn-primary" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

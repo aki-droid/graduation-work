@@ -33,19 +33,20 @@ gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
-# Authentication
-gem 'devise'
-
-# UI Framework
-gem 'bootstrap', '~> 5.2'
-gem 'jquery-rails'
-
-# Location services
-gem 'geocoder'
-
-# CSS processing
-gem 'sass-rails', '>= 6'
+# gem 'sass-rails', '>= 6'
+# Use Sass to process CSS
 gem "sassc-rails", "~> 2.1"
+
+# Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
+# gem "image_processing", "~> 1.2"
+
+# ===================================
+# アプリケーション固有のGem
+# ===================================
+gem 'devise'                    # ユーザー認証
+gem 'bootstrap', '~> 5.2'       # UIフレームワーク
+gem 'jquery-rails'              # Bootstrap用
+gem 'geocoder'                  # 位置情報・地図機能
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

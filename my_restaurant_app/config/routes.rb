@@ -1,26 +1,21 @@
+# config/routes.rb
 Rails.application.routes.draw do
-  # Devise認証機能
   devise_for :users
-  
-  # ルートページ
   root "restaurants#index"
   
-  # レストラン関連
-  resources :restaurants do
-    member do
-      get :bookmarks  # ブックマーク一覧
-    end
+  resources :restaurants, only: [:index, :show] do
     collection do
-      get :search     # 検索機能
+      get :search
+    end
+    
+    member do
+      get :bookmarks  # 将来実装予定
     end
   end
   
-  # ホームページ（オプション）
-  get 'home/index'
-  
-  # 検索機能（別ルート）
-  get 'search', to: 'restaurants#search'
-  
-  # 健康チェック用
+  # ヘルスチェック
   get "up" => "rails/health#show", as: :rails_health_check
+  
+  # 開発用（必要に応じて）
+  get 'home/index' if Rails.env.development?
 end
