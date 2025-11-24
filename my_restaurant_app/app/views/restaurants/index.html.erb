@@ -1,26 +1,168 @@
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <div class="card">
-        <div class="card-body text-center">
-          <h1 class="card-title">My Restaurant App</h1>
-          <p class="card-text">レストラン管理アプリケーションへようこそ！</p>
-          
-          <% if user_signed_in? %>
-            <h3>こんにちは、<%= current_user.email %>さん！</h3>
-            <p>ログイン中です</p>
-            <%= form_with url: destroy_user_session_path, method: :delete, local: true, 
-                data: { confirm: 'ログアウトしますか？' } do |form| %>
-              <%= form.submit 'ログアウト', class: 'btn btn-secondary' %>
-            <% end %>
-          <% else %>
-            <div class="mt-4">
-              <%= link_to 'ユーザー登録', new_user_registration_path, class: 'btn btn-primary me-3' %>
-              <%= link_to 'ログイン', new_user_session_path, class: 'btn btn-outline-primary' %>
-            </div>
-          <% end %>
+<div class="container my-5">
+  <!-- レスポンシブナビゲーションヘッダー -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+  <div class="container">
+    <%= link_to "🍽️ グルメアプリ", root_path, class: "navbar-brand" %>
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <%= link_to "🏠 ホーム", root_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "🍴 レストラン一覧", restaurants_path, class: "nav-link" %>
+        </li>
+      </ul>
+      
+      <ul class="navbar-nav">
+        <% if user_signed_in? %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+              👤 <%= current_user.name || current_user.email %>
+            </a>
+            <ul class="dropdown-menu">
+              <li><%= link_to "📝 プロフィール編集", edit_user_registration_path, class: "dropdown-item" %></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><%= link_to "🚪 ログアウト", destroy_user_session_path, method: :delete, class: "dropdown-item" %></li>
+            </ul>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <%= link_to "🔑 ログイン", new_user_session_path, class: "btn btn-outline-light btn-sm me-2" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "✨ 新規登録", new_user_registration_path, class: "btn btn-light btn-sm" %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  <!-- メインヒーローセクション -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="bg-primary text-white p-5 rounded-3 text-center">
+        <h1 class="display-4">🎉 レストラン検索アプリ</h1>
+        <p class="lead">JavaScript機能が正常に動作しています！</p>
+        <div class="mt-4">
+          <button class="btn btn-light btn-lg" data-controller="hello" data-action="click->hello#greet">
+            🚀 JavaScript動作テスト
+          </button>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- 機能紹介セクション -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <h2 class="text-center mb-5">🌟 主要機能</h2>
+    </div>
+  </div>
+
+  <!-- 機能カード -->
+  <div class="row g-4 mb-5">
+    <!-- 検索機能 -->
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body text-center">
+          <div class="feature-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+            <i class="fs-3">🔍</i>
+          </div>
+          <h5 class="card-title">高度な検索機能</h5>
+          <p class="card-text">地域、料理ジャンル、価格帯から理想のレストランを素早く見つけられます。</p>
+          <button class="btn btn-outline-primary" data-controller="restaurant-search" data-action="click->restaurant-search#showSearchDemo">
+            デモを見る
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- マップ機能 -->
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body text-center">
+          <div class="feature-icon bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+            <i class="fs-3">🗺️</i>
+          </div>
+          <h5 class="card-title">インタラクティブマップ</h5>
+          <p class="card-text">地図上でレストランの位置を確認し、ルート案内も利用できます。</p>
+          <button class="btn btn-outline-success" data-controller="map" data-action="click->map#showMapDemo">
+            マップを見る
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- レビュー機能 -->
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm border-0">
+        <div class="card-body text-center">
+          <div class="feature-icon bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+            <i class="fs-3">⭐</i>
+          </div>
+          <h5 class="card-title">レビュー・評価</h5>
+          <p class="card-text">実際の利用者のレビューと評価で、信頼できる情報を提供します。</p>
+          <button class="btn btn-outline-warning" data-controller="review" data-action="click->review#showReviewDemo">
+            レビューを見る
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 統計情報セクション -->
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="bg-light p-4 rounded-3">
+        <h3 class="text-center mb-4">📊 アプリ統計</h3>
+        <div class="row text-center">
+          <div class="col-md-3">
+            <div class="stat-item">
+              <h4 class="text-primary mb-1">1,250+</h4>
+              <p class="text-muted">登録レストラン</p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stat-item">
+              <h4 class="text-success mb-1">3,480+</h4>
+              <p class="text-muted">ユーザーレビュー</p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stat-item">
+              <h4 class="text-warning mb-1">45+</h4>
+              <p class="text-muted">対応エリア</p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="stat-item">
+              <h4 class="text-danger mb-1">4.8★</h4>
+              <p class="text-muted">平均評価</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- フッター -->
+  <footer class="bg-dark text-light py-4 rounded-3">
+    <div class="row">
+      <div class="col-md-6">
+        <h5>🍽️ My Restaurant App</h5>
+        <p class="mb-0">最高のレストラン体験をお届けします</p>
+      </div>
+      <div class="col-md-6 text-md-end">
+        <p class="mb-0">© 2024 Restaurant App. All rights reserved.</p>
+        <small class="text-muted">Powered by Rails & Bootstrap</small>
+      </div>
+    </div>
+  </footer>
+
 </div>

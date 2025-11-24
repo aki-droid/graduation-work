@@ -10,7 +10,9 @@ import "bootstrap"
 
 // Bootstrap初期化
 document.addEventListener('DOMContentLoaded', function() {
+  console.log('JavaScript loaded successfully!');
   console.log('Bootstrap & jQuery loaded successfully!');
+  console.log('🍽️ 飲食店アプリ用JavaScript初期化完了！');
   
   // Bootstrap tooltips initialization
   const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')

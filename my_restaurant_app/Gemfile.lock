@@ -289,7 +289,7 @@ DEPENDENCIES
   jquery-rails
   pg (~> 1.1)
   puma (>= 5.0)
-  rails (~> 7.0.10)
+  rails (~> 7.0.3, >= 7.0.3.1)
   sassc-rails (~> 2.1)
   selenium-webdriver
   sprockets-rails
@@ -299,7 +299,7 @@ DEPENDENCIES
   web-console
 
 RUBY VERSION
-   ruby 3.1.7p261
+   ruby 3.1.4p223
 
 BUNDLED WITH
-   2.3.27
+   2.4.13

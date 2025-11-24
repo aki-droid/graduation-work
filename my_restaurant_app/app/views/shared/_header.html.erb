@@ -1,0 +1,57 @@
+<!-- app/views/shared/_header.html.erb -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <%= link_to "🍽️ レストランアプリ", root_path, class: "navbar-brand" %>
+    
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <%= link_to "🏠 ホーム", root_path, class: "nav-link" %>
+        </li>
+        
+        <%# ✅ ERBコメント（完全に無効化される） %>
+        <%# link_to "➕ レストラン追加", new_restaurant_path, class: "nav-link" %>
+        
+        <!-- ✅ 代替案: 準備中表示 -->
+        <li class="nav-item">
+          <span class="nav-link text-muted">➕ レストラン追加（準備中）</span>
+        </li>
+        
+        <li class="nav-item">
+          <%= link_to "🔍 検索", search_restaurants_path, class: "nav-link" %>
+        </li>
+      </ul>
+      
+      <!-- ユーザー関連メニュー -->
+      <ul class="navbar-nav">
+        <% if user_signed_in? %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" 
+               data-bs-toggle="dropdown" aria-expanded="false">
+              👤 <%= current_user.email %>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <%= link_to "👤 プロフィール", edit_user_registration_path, 
+                    class: "dropdown-item" %>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <%= link_to "🚪 ログアウト", destroy_user_session_path, 
+                    data: { turbo_method: :delete }, 
+                    class: "dropdown-item" %>
+              </li>
+            </ul>
+          </li>
+        <% else %>
+          <li class="nav-item">
+            <%= link_to "🔑 ログイン", new_user_session_path, class: "nav-link" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "📝 新規登録", new_user_registration_path, class: "nav-link" %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</nav>
