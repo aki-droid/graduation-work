@@ -1,9 +1,9 @@
-# config/routes.rb
 Rails.application.routes.draw do
   devise_for :users
   root "restaurants#index"
   
-  resources :restaurants, only: [:index, :show] do
+  # onlyの制限を外してフルCRUDを有効化
+  resources :restaurants do
     collection do
       get :search
     end

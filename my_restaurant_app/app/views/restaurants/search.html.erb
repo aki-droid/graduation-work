@@ -1,4 +1,3 @@
-<!-- app/views/restaurants/search.html.erb -->
 <div class="container mt-4">
   <div class="row">
     <div class="col-12">
@@ -25,13 +24,10 @@
           <% @restaurants.each do |restaurant| %>
             <div class="col-md-6 col-lg-4 mb-4">
               <div class="card h-100">
-                <% if restaurant.image.present? %>
-                  <%= image_tag restaurant.image, class: "card-img-top", style: "height: 200px; object-fit: cover;" %>
-                <% else %>
-                  <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
-                    <i class="fas fa-utensils fa-3x text-muted"></i>
-                  </div>
-                <% end %>
+                <!-- 画像表示部分 -->
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                  <i class="fas fa-utensils fa-3x text-muted"></i>
+                </div>
                 
                 <div class="card-body">
                   <h5 class="card-title"><%= restaurant.name %></h5>
@@ -54,7 +50,7 @@
                 </div>
               </div>
             </div>
-          <% end %>
+          <% end %>  <!-- ←この end が抜けていました！ -->
         </div>
         
       <% else %>
