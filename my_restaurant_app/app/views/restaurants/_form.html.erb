@@ -1,0 +1,62 @@
+<%= form_with model: restaurant, local: true, class: 'row g-3' do |form| %>
+  <% if restaurant.errors.any? %>
+    <div class="alert alert-danger">
+      <h5><%= pluralize(restaurant.errors.count, "error") %> prohibited this restaurant from being saved:</h5>
+      <ul class="mb-0">
+        <% restaurant.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="col-md-6">
+    <%= form.label :name, '店名', class: 'form-label' %>
+    <%= form.text_field :name, class: 'form-control' %>
+  </div>
+
+  <div class="col-md-6">
+    <%= form.label :category, 'カテゴリー', class: 'form-label' %>
+    <%= form.select :category, 
+        options_for_select([
+          ['和食', '和食'],
+          ['洋食', '洋食'],
+          ['中華', '中華'],
+          ['イタリアン', 'イタリアン'],
+          ['フレンチ', 'フレンチ'],
+          ['カフェ', 'カフェ'],
+          ['その他', 'その他']
+        ], restaurant.category), 
+        { prompt: 'カテゴリーを選択してください' }, 
+        { class: 'form-select' } %>
+  </div>
+
+  <div class="col-12">
+    <%= form.label :address, '住所', class: 'form-label' %>
+    <%= form.text_field :address, class: 'form-control' %>
+  </div>
+
+  <div class="col-md-6">
+    <%= form.label :phone, '電話番号', class: 'form-label' %>
+    <%= form.telephone_field :phone, class: 'form-control' %>
+  </div>
+
+  <div class="col-12">
+    <%= form.label :description, '説明', class: 'form-label' %>
+    <%= form.text_area :description, rows: 4, class: 'form-control' %>
+  </div>
+
+  <div class="col-md-6">
+    <%= form.label :latitude, '緯度', class: 'form-label' %>
+    <%= form.number_field :latitude, step: :any, class: 'form-control' %>
+  </div>
+
+  <div class="col-md-6">
+    <%= form.label :longitude, '経度', class: 'form-label' %>
+    <%= form.number_field :longitude, step: :any, class: 'form-control' %>
+  </div>
+
+  <div class="col-12">
+    <%= form.submit restaurant.new_record? ? '作成' : '更新', class: 'btn btn-primary' %>
+  </div>
+<% end %>

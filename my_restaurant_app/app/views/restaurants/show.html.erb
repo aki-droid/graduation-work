@@ -1,0 +1,84 @@
+<div class="container my-5">
+  <div class="row">
+
+    <!-- メイン情報 -->
+    <div class="col-md-8">
+      <h1><%= @restaurant.name %></h1>
+
+      <% if @restaurant.category.present? %>
+        <span class="badge bg-primary mb-3"><%= @restaurant.category %></span>
+      <% end %>
+
+      <p class="lead"><%= @restaurant.description %></p>
+
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">📍 基本情報</h5>
+          <p><strong>住所:</strong> <%= @restaurant.address %></p>
+
+          <% if @restaurant.phone.present? %>
+            <p><strong>電話:</strong> <%= @restaurant.phone %></p>
+          <% end %>
+
+          <p><strong>登録日:</strong> <%= @restaurant.created_at.strftime("%Y年%m月%d日") %></p>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <%= link_to "✏️ 編集", edit_restaurant_path(@restaurant), class: "btn btn-warning" %>
+        <%= link_to "🔙 一覧に戻る", restaurants_path, class: "btn btn-secondary" %>
+        <%= link_to "🗑️ 削除", @restaurant, method: :delete,
+            data: { confirm: "本当に削除しますか？" },
+            class: "btn btn-danger" %>
+      </div>
+    </div>
+
+    <!-- サイド情報（地図 ＋ 詳細情報） -->
+    <div class="col-md-4">
+
+      <% if @restaurant.latitude.present? && @restaurant.longitude.present? %>
+        <!-- 地図あり -->
+        <div class="card mb-3">
+          <div class="card-header">
+            <h5 class="card-title mb-0">🗺️ 地図</h5>
+          </div>
+          <div class="card-body p-0">
+            <div data-controller="map"
+                 data-map-latitude-value="<%= @restaurant.latitude %>"
+                 data-map-longitude-value="<%= @restaurant.longitude %>"
+                 data-map-name-value="<%= @restaurant.name %>"
+                 style="height: 300px;">
+            </div>
+          </div>
+        </div>
+
+      <% else %>
+        <!-- 地図なし -->
+        <div class="card mb-3">
+          <div class="card-body text-center">
+            <i class="fas fa-map-marker-alt fa-3x text-muted mb-3"></i>
+            <p class="text-muted">位置情報が登録されていません</p>
+            <%= link_to "位置情報を追加", edit_restaurant_path(@restaurant),
+                class: "btn btn-outline-primary btn-sm" %>
+          </div>
+        </div>
+
+      <% end %>
+
+      <!-- 追加情報カード -->
+      <div class="card mt-3">
+        <div class="card-body">
+          <h6 class="card-title">📊 詳細情報</h6>
+          <small class="text-muted">
+            <p>作成: <%= @restaurant.created_at.strftime("%Y/%m/%d %H:%M") %></p>
+            <% if @restaurant.updated_at != @restaurant.created_at %>
+              <p>更新: <%= @restaurant.updated_at.strftime("%Y/%m/%d %H:%M") %></p>
+            <% end %>
+          </small>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
