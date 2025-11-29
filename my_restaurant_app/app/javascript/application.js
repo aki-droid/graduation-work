@@ -1,19 +1,15 @@
-// app/javascript/application.js
-
 // Configure your import map in config/importmap.rb. Read more: https://github.com/rails/importmap-rails
 import "@hotwired/turbo-rails"
 import "controllers"
-
-// Bootstrap & jQuery
-import "jquery"
 import "bootstrap"
+import "location"
+
+console.log('JavaScript loaded successfully!');
+console.log('Bootstrap loaded!');
+console.log('🍽️ 飲食店アプリ用JavaScript初期化完了！');
 
 // Bootstrap初期化
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('JavaScript loaded successfully!');
-  console.log('Bootstrap & jQuery loaded successfully!');
-  console.log('🍽️ 飲食店アプリ用JavaScript初期化完了！');
-  
+document.addEventListener('DOMContentLoaded', () => {
   // Bootstrap tooltips initialization
   const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
   const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
