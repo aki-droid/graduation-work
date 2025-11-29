@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   devise_for :users
   root "restaurants#index"
-  
-  # onlyの制限を外してフルCRUDを有効化
+
+  # レストラン関連（フルCRUD + search + bookmarks）
   resources :restaurants do
     collection do
       get :search
@@ -12,10 +12,10 @@ Rails.application.routes.draw do
       get :bookmarks  # 将来実装予定
     end
   end
-  
+
   # ヘルスチェック
   get "up" => "rails/health#show", as: :rails_health_check
-  
-  # 開発用（必要に応じて）
+
+  # 開発用
   get 'home/index' if Rails.env.development?
 end
