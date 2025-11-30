@@ -1,0 +1,147 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-6">位置情報の履歴</h1>
+
+  <!-- 地図コントローラー -->
+  <div 
+    data-controller="map" 
+    data-map-latitude-value="<%= @location&.latitude || 35.6812 %>" 
+    data-map-longitude-value="<%= @location&.longitude || 139.7671 %>"
+    data-map-name-value="<%= @location&.name || '現在地' %>"
+    class="mb-8">
+    <!-- 地図がここに表示される（initializeMapメソッドで描画） -->
+  </div>
+
+  <!-- 現在地取得ボタン -->
+  <div class="mb-8">
+    <button 
+      id="get-location-btn"
+      class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+      📍 現在地を取得
+    </button>
+    <div id="location-status" class="mt-4 text-sm"></div>
+  </div>
+
+  <!-- 位置情報一覧テーブル -->
+  <div class="bg-white shadow-md rounded-lg overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">緯度</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">経度</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">精度</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">取得日時</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">操作</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <% @locations.each do |location| %>
+          <tr>
+            <td class="px-6 py-4 whitespace-nowrap"><%= location.id %></td>
+            <td class="px-6 py-4 whitespace-nowrap"><%= location.latitude.round(6) %></td>
+            <td class="px-6 py-4 whitespace-nowrap"><%= location.longitude.round(6) %></td>
+            <td class="px-6 py-4 whitespace-nowrap"><%= location.accuracy.round(2) %>m</td>
+            <td class="px-6 py-4 whitespace-nowrap"><%= location.created_at.strftime('%Y-%m-%d %H:%M') %></td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <!-- 地図表示ボタン -->
+              <div 
+                data-controller="map" 
+                data-map-latitude-value="<%= location.latitude %>" 
+                data-map-longitude-value="<%= location.longitude %>"
+                data-map-name-value="位置情報 #<%= location.id %>"
+                class="inline-block">
+                <button 
+                  data-action="click->map#showMapDemo"
+                  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-sm">
+                  🗺️ 地図
+                </button>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 現在地取得のJavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const getLocationBtn = document.getElementById('get-location-btn');
+  const locationStatus = document.getElementById('location-status');
+
+  getLocationBtn.addEventListener('click', function() {
+    locationStatus.textContent = '位置情報を取得中...';
+    locationStatus.className = 'mt-4 text-sm text-blue-600';
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          const locationData = {
+            location: {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+              accuracy: position.coords.accuracy
+            }
+          };
+
+          // サーバーに送信
+          fetch('/locations', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify(locationData)
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.status === 'success') {
+              locationStatus.textContent = data.message + ' - ページを更新します...';
+              locationStatus.className = 'mt-4 text-sm text-green-600';
+              
+              // 3秒後にページをリロード
+              setTimeout(() => {
+                window.location.reload();
+              }, 3000);
+            } else {
+              locationStatus.textContent = 'エラー: ' + data.message;
+              locationStatus.className = 'mt-4 text-sm text-red-600';
+            }
+          })
+          .catch(error => {
+            locationStatus.textContent = 'エラー: ' + error.message;
+            locationStatus.className = 'mt-4 text-sm text-red-600';
+          });
+        },
+        function(error) {
+          let errorMessage = '';
+          switch(error.code) {
+            case error.PERMISSION_DENIED:
+              errorMessage = '位置情報の取得が拒否されました';
+              break;
+            case error.POSITION_UNAVAILABLE:
+              errorMessage = '位置情報が利用できません';
+              break;
+            case error.TIMEOUT:
+              errorMessage = '位置情報の取得がタイムアウトしました';
+              break;
+            default:
+              errorMessage = '不明なエラーが発生しました';
+          }
+          locationStatus.textContent = errorMessage;
+          locationStatus.className = 'mt-4 text-sm text-red-600';
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0
+        }
+      );
+    } else {
+      locationStatus.textContent = 'このブラウザでは位置情報がサポートされていません';
+      locationStatus.className = 'mt-4 text-sm text-red-600';
+    }
+  });
+});
+</script>

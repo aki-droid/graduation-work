@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_11_25_141712) do
+ActiveRecord::Schema[7.0].define(version: 2025_11_29_144024) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "locations", force: :cascade do |t|
+    t.decimal "latitude", precision: 10, scale: 8, null: false, comment: "緯度"
+    t.decimal "longitude", precision: 11, scale: 8, null: false, comment: "経度"
+    t.float "accuracy", comment: "精度（メートル）"
+    t.bigint "user_id", comment: "ユーザーID"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_locations_on_created_at"
+    t.index ["user_id"], name: "index_locations_on_user_id"
+  end
 
   create_table "restaurants", force: :cascade do |t|
     t.string "name"
