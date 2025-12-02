@@ -11,7 +11,19 @@ export default class extends Controller {
 
   connect() {
     console.log("🗺️ 地図コントローラーが接続されました！")
-    console.log(`緯度: ${this.latitudeValue}, 経度: ${this.longitudeValue}`)
+    
+    // 🆕 localStorageから座標を復元
+    const savedLatitude = localStorage.getItem('user_latitude')
+    const savedLongitude = localStorage.getItem('user_longitude')
+    
+    if (savedLatitude && savedLongitude) {
+      this.latitudeValue = parseFloat(savedLatitude)
+      this.longitudeValue = parseFloat(savedLongitude)
+      console.log(`✅ 保存された座標を復元: 緯度=${this.latitudeValue}, 経度=${this.longitudeValue}`)
+    } else {
+      console.log(`📍 初期座標: 緯度=${this.latitudeValue}, 経度=${this.longitudeValue}`)
+    }
+    
     this.initializeMap()
 
     // 🔥 location.js からのイベントを受け取る
@@ -27,13 +39,18 @@ export default class extends Controller {
   // 🔥 location.js から座標を受け取る
   handleLocationUpdate(event) {
     console.log("📡 map_controller が座標を受信しました！", event.detail)
-    
+
     // 座標を更新
     this.latitudeValue = event.detail.latitude
     this.longitudeValue = event.detail.longitude
-    
+
+    // 🆕 localStorageに保存
+    localStorage.setItem('user_latitude', event.detail.latitude)
+    localStorage.setItem('user_longitude', event.detail.longitude)
+    console.log('💾 座標をlocalStorageに保存しました')
+
     console.log(`✅ 更新後の座標: 緯度=${this.latitudeValue}, 経度=${this.longitudeValue}`)
-    
+
     // 地図を再描画
     this.initializeMap()
   }
@@ -46,13 +63,13 @@ export default class extends Controller {
         <p>緯度: ${this.latitudeValue || '未設定'}</p>
         <p>経度: ${this.longitudeValue || '未設定'}</p>
         <div class="mt-3">
-          <button 
-            data-action="click->map#showMapDemo" 
+          <button
+            data-action="click->map#showMapDemo"
             class="btn btn-primary me-2">
             地図を表示
           </button>
-          <button 
-            data-action="click->map#showDirections" 
+          <button
+            data-action="click->map#showDirections"
             class="btn btn-success">
             ルートを表示
           </button>
@@ -65,7 +82,7 @@ export default class extends Controller {
   showMapDemo(event) {
     event.preventDefault()
     console.log("🗺️ showMapDemo が実行されました！")
-    
+
     if (this.hasValidCoordinates()) {
       const url = `https://www.google.com/maps?q=${this.latitudeValue},${this.longitudeValue}`
       window.open(url, '_blank')
@@ -78,7 +95,7 @@ export default class extends Controller {
   showDirections(event) {
     if (event) event.preventDefault()
     console.log("🗺️ showDirections が実行されました！")
-    
+
     if (this.hasValidCoordinates()) {
       const url = `https://www.google.com/maps/dir/?api=1&destination=${this.latitudeValue},${this.longitudeValue}`
       window.open(url, '_blank')
@@ -89,9 +106,9 @@ export default class extends Controller {
 
   // 座標が有効かチェック
   hasValidCoordinates() {
-    return this.latitudeValue && 
-           this.longitudeValue && 
-           !isNaN(this.latitudeValue) && 
+    return this.latitudeValue &&
+           this.longitudeValue &&
+           !isNaN(this.latitudeValue) &&
            !isNaN(this.longitudeValue) &&
            this.latitudeValue !== 0 &&
            this.longitudeValue !== 0
