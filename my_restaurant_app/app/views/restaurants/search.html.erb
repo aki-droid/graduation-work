@@ -4,7 +4,71 @@
       <h2 class="mb-4">
         <i class="fas fa-search me-2"></i>検索結果
       </h2>
-      
+
+      <!-- 🆕 検索フォームの追加 -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">レストランを検索</h5>
+          <%= form_with url: search_restaurants_path, method: :get, local: true, id: "searchForm" do |f| %>
+            <div class="row mb-3">
+              <!-- キーワード検索 -->
+              <div class="col-md-6">
+                <%= f.label :keyword, 'キーワード', class: 'form-label' %>
+                <%= f.text_field :keyword, 
+                  value: params[:keyword], 
+                  class: 'form-control', 
+                  placeholder: '店名、住所、説明で検索' %>
+              </div>
+              
+              <!-- カテゴリ検索 -->
+              <div class="col-md-3">
+                <%= f.label :category, 'カテゴリ', class: 'form-label' %>
+                <%= f.select :category, 
+                  options_for_select(
+                    [
+                      ['すべて', ''], 
+                      ['和食', '和食'], 
+                      ['洋食', '洋食'], 
+                      ['中華', '中華'], 
+                      ['イタリアン', 'イタリアン'], 
+                      ['フレンチ', 'フレンチ'], 
+                      ['カフェ', 'カフェ'], 
+                      ['ファストフード', 'ファストフード'], 
+                      ['その他', 'その他']
+                    ], 
+                    params[:category]
+                  ), 
+                  {}, 
+                  class: 'form-select' 
+                %>
+              </div>
+              
+              <!-- 検索範囲 -->
+              <div class="col-md-3">
+                <%= f.label :radius, '検索範囲（km）', class: 'form-label' %>
+                <%= f.number_field :radius, 
+                  value: params[:radius] || 5, 
+                  class: 'form-control', 
+                  min: 1, 
+                  max: 50 %>
+              </div>
+            </div>
+            
+            <!-- 検索ボタン -->
+            <div class="d-flex gap-2">
+              <button type="button" id="getCurrentLocation" class="btn btn-secondary">
+                <i class="fas fa-location-arrow me-2"></i>現在地から検索
+              </button>
+              <%= f.submit '検索', class: 'btn btn-primary' %>
+            </div>
+            
+            <!-- 🆕 隠しフィールド（JavaScriptで位置情報を設定） -->
+            <%= f.hidden_field :latitude, id: 'latitude' %>
+            <%= f.hidden_field :longitude, id: 'longitude' %>
+          <% end %>
+        </div>
+      </div>
+
       <!-- 検索条件の表示 -->
       <% if params[:keyword].present? %>
         <div class="alert alert-info">
@@ -12,14 +76,22 @@
         </div>
       <% end %>
       
+      <!-- 🆕 位置情報検索の場合の表示 -->
+      <% if params[:latitude].present? && params[:longitude].present? %>
+        <div class="alert alert-info">
+          <i class="fas fa-location-arrow me-2"></i>
+          <strong>現在地から半径<%= params[:radius] || 5 %>km以内で検索</strong>
+        </div>
+      <% end %>
+
       <!-- 検索結果の表示 -->
       <% if @restaurants && @restaurants.any? %>
         <div class="mb-3">
           <span class="badge bg-primary">
-            <%= @restaurants.count %>件の店舗が見つかりました
+            <%= @restaurants.size %>件の店舗が見つかりました
           </span>
         </div>
-        
+
         <div class="row">
           <% @restaurants.each do |restaurant| %>
             <div class="col-md-6 col-lg-4 mb-4">
@@ -28,9 +100,20 @@
                 <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
                   <i class="fas fa-utensils fa-3x text-muted"></i>
                 </div>
-                
+
                 <div class="card-body">
                   <h5 class="card-title"><%= restaurant.name %></h5>
+                  
+                  <!-- 🆕 距離の表示 -->
+                  <% if @latitude.present? && @longitude.present? %>
+                    <p class="card-text">
+                      <span class="badge bg-success">
+                        <i class="fas fa-walking me-1"></i>
+                        現在地から約<%= restaurant.distance_from(@latitude, @longitude).round(2) %>km
+                      </span>
+                    </p>
+                  <% end %>
+                  
                   <p class="card-text">
                     <small class="text-muted">
                       <i class="fas fa-map-marker-alt me-1"></i>
@@ -43,16 +126,16 @@
                     </p>
                   <% end %>
                 </div>
-                
+
                 <div class="card-footer">
-                  <%= link_to "詳細を見る", restaurant_path(restaurant), 
+                  <%= link_to "詳細を見る", restaurant_path(restaurant),
                       class: "btn btn-primary btn-sm" %>
                 </div>
               </div>
             </div>
-          <% end %>  <!-- ←この end が抜けていました！ -->
+          <% end %>
         </div>
-        
+
       <% else %>
         <!-- 検索結果が0件の場合 -->
         <div class="text-center py-5">
@@ -61,23 +144,10 @@
           <p class="text-muted">
             別のキーワードで検索してみてください
           </p>
-          <%= link_to "トップページに戻る", root_path, 
+          <%= link_to "トップページに戻る", root_path,
               class: "btn btn-outline-primary mt-3" %>
         </div>
       <% end %>
-      
-      <!-- 検索フォームの再表示 -->
-      <div class="mt-5 p-4 bg-light rounded">
-        <h5>再検索</h5>
-        <%= form_with url: search_restaurants_path, method: :get, 
-            class: "d-flex", local: true do |f| %>
-          <%= f.text_field :keyword, 
-              placeholder: "店舗名、住所、料理ジャンルで検索", 
-              value: params[:keyword],
-              class: "form-control me-2" %>
-          <%= f.submit "検索", class: "btn btn-primary" %>
-        <% end %>
-      </div>
     </div>
   </div>
 </div>

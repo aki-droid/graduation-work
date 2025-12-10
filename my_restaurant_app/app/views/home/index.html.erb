@@ -10,18 +10,18 @@
     <div class="col-md-6">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Bootstrap Card</h5>
-          <p class="card-text">Bootstrapのコンポーネントが正常に動作しています。</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
+          <h5 class="card-title">レストラン検索</h5>
+          <p class="card-text">近くのレストランを検索できます。</p>
+          <%= link_to "レストランを検索", restaurants_path, class: "btn btn-primary" %>
         </div>
       </div>
     </div>
     <div class="col-md-6">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">レストラン検索アプリ</h5>
-          <p class="card-text">これから素晴らしいアプリを作成していきます！</p>
-          <a href="#" class="btn btn-success">開始する</a>
+          <h5 class="card-title">レストラン登録</h5>
+          <p class="card-text">新しいレストランを登録できます。</p>
+          <%= link_to "レストランを登録", new_restaurant_path, class: "btn btn-success" %>
         </div>
       </div>
     </div>
