@@ -1,0 +1,25 @@
+.mood-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 3px solid transparent;
+  
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  }
+  
+  &.selected {
+    border-color: #007bff;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    
+    .card-title, .card-text {
+      color: white;
+    }
+  }
+}
+
+.mood-icon {
+  font-size: 4rem;
+  animation: bounce 2s infinite;
+}
