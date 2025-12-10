@@ -8,21 +8,18 @@ class RestaurantsController < ApplicationController
   end
 
   def show
-    # before_actionで設定済み
   end
 
-  # 🆕 新規追加が必要なアクション
   def new
     @restaurant = current_user.restaurants.build
   end
 
   def edit
-    # before_actionで設定済み
   end
 
   def create
     @restaurant = current_user.restaurants.build(restaurant_params)
-    
+
     if @restaurant.save
       redirect_to @restaurant, notice: 'レストランが正常に作成されました。'
     else
@@ -43,22 +40,36 @@ class RestaurantsController < ApplicationController
     redirect_to restaurants_url, notice: 'レストランが正常に削除されました。'
   end
 
-  # 🔄 既存のメソッドはそのまま
   def search
+    @restaurants = current_user.restaurants
+
+    # キーワード検索
     if params[:keyword].present?
       keyword = "%#{params[:keyword].strip}%"
-      @restaurants = current_user.restaurants.where(
+      @restaurants = @restaurants.where(
         "name ILIKE ? OR address ILIKE ? OR description ILIKE ?",
         keyword, keyword, keyword
-      ).order(:name)
-    else
-      @restaurants = Restaurant.none
+      )
     end
-  end
 
-  def bookmarks
-    @restaurant = Restaurant.find(params[:id]) if params[:id].present?
-    @restaurants = []
+    # 位置情報検索
+    if params[:latitude].present? && params[:longitude].present?
+      @latitude  = params[:latitude].to_f
+      @longitude = params[:longitude].to_f
+      @radius    = params[:radius]&.to_f || 5.0
+
+      @restaurants = @restaurants.near(
+        [@latitude, @longitude],
+        @radius,
+        units: :km,
+        order: false
+      )
+    end
+
+    # カテゴリ検索
+    if params[:category].present?
+      @restaurants = @restaurants.where(category: params[:category])
+    end
   end
 
   private
@@ -67,12 +78,13 @@ class RestaurantsController < ApplicationController
     @restaurant = Restaurant.find(params[:id])
   end
 
-  # 🆕 新規追加が必要なメソッド
   def check_owner
     redirect_to restaurants_path, alert: '権限がありません。' unless @restaurant.user == current_user
   end
 
   def restaurant_params
-    params.require(:restaurant).permit(:name, :address, :phone, :description, :category, :latitude, :longitude)
+    params.require(:restaurant).permit(
+      :name, :address, :phone, :description, :category, :latitude, :longitude
+    )
   end
 end
