@@ -1,8 +1,19 @@
 console.log("😊 moods_ui.js loaded");
+
+// 気分とレストランタイプのマッピング
+const moodMapping = {
+  1: ['restaurant', 'cafe', 'bar'],
+  2: ['cafe', 'bakery', 'spa'],
+  3: ['gym', 'sports_club', 'stadium'],
+  4: ['restaurant', 'bar', 'night_club'],
+  5: ['restaurant', 'meal_takeaway', 'food'],
+  6: ['tourist_attraction', 'amusement_park']
+};
+
 document.addEventListener('turbo:load', () => {
   const moodCards = document.querySelectorAll('.mood-card');
   const searchButton = document.getElementById('search-by-mood');
-  
+
   // ページ読み込み時に保存された気分を復元
   const savedMood = localStorage.getItem('selectedMood');
   if (savedMood) {
@@ -11,22 +22,28 @@ document.addEventListener('turbo:load', () => {
       savedCard.classList.add('selected');
     }
   }
-  
+
   // 気分カードをクリックした時の処理
   moodCards.forEach(card => {
     card.addEventListener('click', () => {
       // 他のカードの選択を解除
       moodCards.forEach(c => c.classList.remove('selected'));
-      
+
       // クリックされたカードを選択状態に
       card.classList.add('selected');
-      
+
       // 選択された気分のIDを取得
       const moodId = card.dataset.moodId;
-      
+
       // ローカルストレージに保存
       localStorage.setItem('selectedMood', moodId);
-      
+
+      // 🆕 レストランタイプをローカルストレージに保存
+      const restaurantTypes = moodMapping[moodId];
+      localStorage.setItem('restaurantTypes', JSON.stringify(restaurantTypes));
+      console.log(`😊 気分ID: ${moodId}`);
+      console.log(`😊 レストランタイプ: ${restaurantTypes.join(', ')}`);
+
       // サーバーに送信
       fetch('/moods/select', {
         method: 'POST',
@@ -34,22 +51,26 @@ document.addEventListener('turbo:load', () => {
           'Content-Type': 'application/json',
           'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content
         },
-        body: JSON.stringify({ mood_id: moodId })
+        body: JSON.stringify({ 
+          mood_id: moodId,
+          restaurant_types: restaurantTypes  // 🆕 レストランタイプも送信
+        })
       })
       .then(response => response.json())
       .then(data => {
         if (data.success) {
-          console.log('気分を保存しました:', data.mood);
+          console.log('✅ 気分を保存しました:', data.mood);
+          console.log('✅ レストランタイプ:', restaurantTypes);
         } else {
-          console.error('エラー:', data.error);
+          console.error('❌ エラー:', data.error);
         }
       })
       .catch(error => {
-        console.error('通信エラー:', error);
+        console.error('❌ 通信エラー:', error);
       });
     });
   });
-  
+
   // 検索ボタンをクリックした時の処理
   if (searchButton) {
     searchButton.addEventListener('click', (e) => {
@@ -57,6 +78,11 @@ document.addEventListener('turbo:load', () => {
       if (!selectedMood) {
         e.preventDefault();
         alert('気分を選択してください');
+      } else {
+        const restaurantTypes = localStorage.getItem('restaurantTypes');
+        console.log('🔍 検索開始');
+        console.log('😊 選択された気分:', selectedMood);
+        console.log('🍽️ レストランタイプ:', restaurantTypes);
       }
     });
   }
