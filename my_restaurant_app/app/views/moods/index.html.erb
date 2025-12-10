@@ -1,0 +1,17 @@
+<div class="container mt-4">
+  <h2 class="text-center mb-4">今日の気分は?</h2>
+  
+  <div class="row justify-content-center">
+    <% Mood.all.each do |mood| %>
+      <div class="col-6 col-md-4 mb-3">
+        <div class="card text-center mood-card" data-mood-id="<%= mood[:id] %>">
+          <div class="card-body">
+            <div class="mood-icon"><%= mood[:icon] %></div>
+            <h5 class="card-title"><%= mood[:name] %></h5>
+            <p class="card-text text-muted"><%= mood[:category] %></p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

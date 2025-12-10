@@ -1,6 +1,14 @@
 Rails.application.routes.draw do
+  get 'moods/index'
   devise_for :users
   root "restaurants#index"
+
+  # 🆕 気分選択機能
+  resources :moods, only: [:index] do
+    collection do
+      post :select  # 気分を選択する
+    end
+  end
 
   # レストラン関連（フルCRUD + search + bookmarks）
   resources :restaurants do
@@ -13,7 +21,7 @@ Rails.application.routes.draw do
     end
   end
 
-  # 位置情報関連（追加）
+  # 位置情報関連
   resources :locations, only: %i[index create]
 
   # ヘルスチェック

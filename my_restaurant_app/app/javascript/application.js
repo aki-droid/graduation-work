@@ -2,6 +2,7 @@
 
 import "@hotwired/turbo-rails";
 import "./controllers";
+import "./moods_ui";
 
 // Bootstrap
 import * as bootstrap from "bootstrap";
