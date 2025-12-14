@@ -2,13 +2,12 @@
 
 import "@hotwired/turbo-rails";
 import "./controllers";
-import "./moods_ui";
-
-// Bootstrap
-import * as bootstrap from "bootstrap";
-
 // 位置情報
 import "./location";
+import "./moods_ui";
+import "./restaurant_search";
+// Bootstrap
+import * as bootstrap from "bootstrap";
 
 console.log("🍽️ JS 初期化開始");
 

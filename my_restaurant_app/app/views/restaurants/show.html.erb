@@ -5,7 +5,7 @@
     <div class="col-md-8">
       <h1><%= @restaurant.name %></h1>
 
-      <% if @restaurant.category.present? %>
+      <% if @restaurant.respond_to?(:category) && @restaurant.category.present? %>
         <span class="badge bg-primary mb-3"><%= @restaurant.category %></span>
       <% end %>
 

@@ -1,13 +1,9 @@
-user = User.find_by(email: "test2@example.com")
-
-if user.nil?
-  puts "❌ test2@example.com のユーザーが見つかりません"
-  exit
+user = User.find_or_create_by!(email: 'test2@example.com') do |u|
+  u.password = 'password'
+  u.password_confirmation = 'password'
 end
+puts "✅ User found or created: #{user.email}"
 
-puts "✅ User found: #{user.email}"
-
-# 栃木駅周辺のレストランデータ
 restaurants_data = [
   {
     name: "栃木駅前レストラン",
@@ -17,55 +13,57 @@ restaurants_data = [
     category: "和食",
     latitude: 36.3825,
     longitude: 139.7339,
-    user_id: user.id
+    mood: "1"
   },
   {
-    name: "栃木市役所近くのカフェ",
-    address: "栃木県栃木市万町9-25",
+    name: "栃木イタリアンダイニング",
+    address: "栃木県栃木市境町1-1",
     phone: "0282-23-5678",
-    description: "市役所近くの落ち着いたカフェ",
-    category: "カフェ",
-    latitude: 36.3817,
-    longitude: 139.7356,
-    user_id: user.id
-  },
-  {
-    name: "蔵の街イタリアン",
-    address: "栃木県栃木市嘉右衛門町1-1",
-    phone: "0282-23-9012",
-    description: "蔵の街観光エリアのおしゃれなイタリアン",
+    description: "本格イタリアンが楽しめるお店",
     category: "イタリアン",
-    latitude: 36.3795,
-    longitude: 139.7325,
-    user_id: user.id
+    latitude: 36.3850,
+    longitude: 139.7350,
+    mood: "2"
   },
   {
-    name: "栃木駅前ラーメン",
-    address: "栃木県栃木市万町2-1",
+    name: "栃木カフェテラス",
+    address: "栃木県栃木市室町1-1",
+    phone: "0282-23-9999",
+    description: "落ち着いた雰囲気のカフェ",
+    category: "カフェ",
+    latitude: 36.3875,
+    longitude: 139.7360,
+    mood: "3"
+  },
+  {
+    name: "栃木中華料理",
+    address: "栃木県栃木市倭町1-1",
     phone: "0282-23-1111",
-    description: "地元で人気のラーメン店",
-    category: "ラーメン",
-    latitude: 36.3830,
-    longitude: 139.7345,
-    user_id: user.id
+    description: "本格中華が楽しめるお店",
+    category: "中華",
+    latitude: 36.3800,
+    longitude: 139.7320,
+    mood: "1"
   },
   {
-    name: "駅南口居酒屋",
-    address: "栃木県栃木市万町3-5",
+    name: "栃木フレンチビストロ",
+    address: "栃木県栃木市泉町1-1",
     phone: "0282-23-2222",
-    description: "駅近の居酒屋",
-    category: "居酒屋",
-    latitude: 36.3820,
-    longitude: 139.7335,
-    user_id: user.id
+    description: "気軽に楽しめるフレンチ",
+    category: "フレンチ",
+    latitude: 36.3900,
+    longitude: 139.7370,
+    mood: "2"
   }
 ]
 
-# データを登録
+Restaurant.destroy_all
+
+# ★★★ ここを修正 ★★★
 restaurants_data.each do |data|
-  Restaurant.find_or_create_by!(name: data[:name]) do |restaurant|
-    restaurant.assign_attributes(data)
-  end
+  # geocodeを無効化してレストランを作成
+  restaurant = Restaurant.new(data)
+  restaurant.save(validate: false)  # バリデーションをスキップしてgeocodeを実行しない
 end
 
-puts "Seed完了: #{Restaurant.count}件のレストランを登録しました"
+puts "✅ Seed完了: #{restaurants_data.size}件のレストランを登録しました"

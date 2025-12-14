@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get 'moods/index'
   devise_for :users
   root "restaurants#index"
 
