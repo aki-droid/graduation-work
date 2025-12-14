@@ -1,17 +1,92 @@
 <div class="container mt-4">
   <h2 class="text-center mb-4">今日の気分は?</h2>
-  
-  <div class="row justify-content-center">
-    <% Mood.all.each do |mood| %>
-      <div class="col-6 col-md-4 mb-3">
-        <div class="card text-center mood-card" data-mood-id="<%= mood[:id] %>">
-          <div class="card-body">
-            <div class="mood-icon"><%= mood[:icon] %></div>
-            <h5 class="card-title"><%= mood[:name] %></h5>
-            <p class="card-text text-muted"><%= mood[:category] %></p>
+
+  <%= form_with url: search_restaurants_path, method: :get, local: true, id: 'mood-form' do |f| %>
+    <!-- 選択された気分を格納 -->
+    <%= f.hidden_field :mood, id: 'selected-mood' %>
+    
+    <!-- 位置情報を格納 -->
+    <%= f.hidden_field :latitude, id: 'latitude' %>
+    <%= f.hidden_field :longitude, id: 'longitude' %>
+
+    <div class="row justify-content-center">
+      <% Mood.all.each do |mood| %>
+        <div class="col-6 col-md-4 mb-3">
+          <div class="card text-center mood-card" 
+               data-mood-id="<%= mood[:id] %>" 
+               style="cursor: pointer;">
+            <div class="card-body">
+              <div class="mood-icon"><%= mood[:icon] %></div>
+              <h5 class="card-title"><%= mood[:name] %></h5>
+              <p class="card-text text-muted"><%= mood[:category] %></p>
+            </div>
           </div>
         </div>
-      </div>
-    <% end %>
-  </div>
+      <% end %>
+    </div>
+
+    <div class="text-center mt-4">
+      <%= f.submit 'お店を検索', class: 'btn btn-primary btn-lg', id: 'search-button', disabled: true %>
+    </div>
+  <% end %>
 </div>
+
+<style>
+  .mood-card {
+    transition: all 0.3s ease;
+  }
+  
+  .mood-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+  
+  .mood-card.selected {
+    border: 3px solid #007bff;
+    background-color: #e7f3ff;
+  }
+  
+  .mood-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+  }
+</style>
+
+<script>
+  // 位置情報を取得
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      function(position) {
+        document.getElementById('latitude').value = position.coords.latitude;
+        document.getElementById('longitude').value = position.coords.longitude;
+        console.log('位置情報取得成功:', position.coords.latitude, position.coords.longitude);
+      },
+      function(error) {
+        console.error('位置情報取得エラー:', error);
+        alert('位置情報の取得に失敗しました。位置情報を許可してください。');
+      }
+    );
+  }
+
+  // 気分カードがクリックされたときの処理
+  document.querySelectorAll('.mood-card').forEach(function(card) {
+    card.addEventListener('click', function() {
+      // すべてのカードからselectedクラスを削除
+      document.querySelectorAll('.mood-card').forEach(function(c) {
+        c.classList.remove('selected');
+      });
+      
+      // クリックされたカードにselectedクラスを追加
+      this.classList.add('selected');
+      
+      // 選択された気分のIDを取得
+      const moodId = this.getAttribute('data-mood-id');
+      document.getElementById('selected-mood').value = moodId;
+      
+      // 検索ボタンを有効化
+      document.getElementById('search-button').disabled = false;
+      
+      console.log('選択された気分:', moodId);
+    });
+  });
+</script>

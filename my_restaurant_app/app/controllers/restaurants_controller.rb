@@ -41,7 +41,12 @@ class RestaurantsController < ApplicationController
   end
 
   def search
-    @restaurants = current_user.restaurants
+    @restaurants = Restaurant.all
+
+    # 気分検索（追加）
+    if params[:mood].present?
+      @restaurants = @restaurants.where(mood: params[:mood])
+    end
 
     # キーワード検索
     if params[:keyword].present?

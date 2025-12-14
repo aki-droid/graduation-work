@@ -10,18 +10,12 @@
       <!-- 左側メニュー -->
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <%= link_to "🏠 ホーム", root_path, class: "nav-link" %>
+          <%= link_to "🏠 ホーム", root_path, class: "nav-link #{'active' if current_page?(root_path)}" %>
         </li>
         <li class="nav-item">
-          <%= link_to "🍴 レストラン一覧", restaurants_path, class: "nav-link" %>
+          <%= link_to "😊 気分を選ぶ", moods_path, class: "nav-link #{'active' if current_page?(moods_path)}" %>
         </li>
       </ul>
-
-      <!-- 検索フォーム -->
-      <%= form_with url: restaurants_path, method: :get, class: "d-flex me-3", local: true do |f| %>
-        <%= f.text_field :keyword, placeholder: "検索", class: "form-control me-2" %>
-        <%= f.submit "検索", class: "btn btn-light" %>
-      <% end %>
 
       <!-- 右側メニュー（ログイン/ユーザー） -->
       <ul class="navbar-nav">
