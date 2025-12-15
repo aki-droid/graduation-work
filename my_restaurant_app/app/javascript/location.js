@@ -29,13 +29,19 @@ function init() {
     sortControls.style.display = 'none';
   }
 
+  // ⭐ 気分選択ボタンのイベントリスナー追加
+  document.querySelectorAll('.mood-btn').forEach(btn => {
+    btn.addEventListener('click', handleMoodSelection);
+  });
+
   // イベントリスナーの登録
   document
     .getElementById('search-by-current-location')
     ?.addEventListener('click', handleGoogleSearch);
 
+  // ⭐ 修正: IDを正しいものに変更
   document
-    .getElementById('getCurrentLocation')
+    .getElementById('server-side-current-location')
     ?.addEventListener('click', handleServerSideSearch);
 
   document
@@ -46,13 +52,60 @@ function init() {
 }
 
 /* ================================
+   気分選択処理
+================================ */
+function handleMoodSelection(e) {
+  const btn = e.currentTarget;
+  const moodId = btn.dataset.moodId;
+  const moodName = btn.dataset.moodName;
+
+  console.log('😊 気分選択:', moodName);
+
+  // すべての気分ボタンの選択状態をリセット
+  document.querySelectorAll('.mood-btn').forEach(b => {
+    b.classList.remove('active');
+    b.classList.replace('btn-primary', 'btn-outline-primary');
+  });
+
+  // 選択されたボタンをアクティブ化
+  btn.classList.add('active');
+  btn.classList.replace('btn-outline-primary', 'btn-primary');
+
+  // 選択した気分を表示
+  const selectedMoodDiv = document.getElementById('selected-mood');
+  const selectedMoodName = document.getElementById('selected-mood-name');
+
+  if (selectedMoodDiv && selectedMoodName) {
+    selectedMoodName.textContent = moodName;
+    selectedMoodDiv.style.display = 'block';
+  }
+
+  // 検索ボタンを有効化
+  const searchBtn = document.getElementById('search-by-current-location');
+  if (searchBtn) {
+    searchBtn.disabled = false;
+    searchBtn.classList.remove('btn-secondary');
+    searchBtn.classList.add('btn-primary');
+  }
+
+  // 選択した気分をグローバル変数に保存(検索時に使用)
+  window.selectedMoodId = moodId;
+}
+
+/* ================================
    Google Places API 検索
 ================================ */
 async function handleGoogleSearch() {
   console.log('🔍 Google Places API検索を開始');
-  
+
+  // ⭐ 気分が選択されているか確認
+  if (!window.selectedMoodId) {
+    showError('気分を選択してください');
+    return;
+  }
+
   showLoading(true);
-  clearError(); // エラー表示をクリア
+  clearError();
 
   try {
     // 位置情報取得
@@ -61,11 +114,20 @@ async function handleGoogleSearch() {
 
     console.log('📍 現在地取得成功:', { latitude, longitude });
 
-    // レストラン検索
+    // ⭐ 検索半径を取得
+    const radiusSelect = document.getElementById('google-places-radius');
+    const radiusKm = radiusSelect ? parseFloat(radiusSelect.value) : 1;
+    const radiusMeters = radiusKm * 1000;
+
+    console.log('📏 検索半径:', radiusKm, 'km (', radiusMeters, 'm)');
+    console.log('🆔 選択された気分ID:', window.selectedMoodId);
+
+    // ⭐ 修正: 変数名を正しいものに変更
     const restaurants = await searchRestaurants(
-      latitude,
-      longitude,
-      ['restaurant']
+      latitude,              // ✅ currentLatitude → latitude
+      longitude,             // ✅ currentLongitude → longitude
+      window.selectedMoodId, // ✅ currentMoodId → window.selectedMoodId
+      radiusMeters           // ✅ searchRadius → radiusMeters
     );
 
     console.log('🍽️ 検索結果:', restaurants.length, '件');
@@ -89,11 +151,9 @@ async function handleGoogleSearch() {
   } catch (e) {
     console.error('❌ 検索エラー:', e);
 
-    // エラーの種類に応じてメッセージを変える
     let message = '検索中にエラーが発生しました';
 
     if (e.code) {
-      // 位置情報取得エラー
       message = {
         [e.PERMISSION_DENIED]: '位置情報の利用が許可されていません',
         [e.POSITION_UNAVAILABLE]: '位置情報を取得できませんでした',
@@ -112,23 +172,23 @@ async function handleGoogleSearch() {
 ================================ */
 async function handleServerSideSearch() {
   console.log('🔍 サーバーサイド検索を開始');
-  
+
   try {
     const position = await getPosition();
-    
+
     const latInput = document.getElementById('latitude');
     const lngInput = document.getElementById('longitude');
     const form = document.getElementById('searchForm');
-    
+
     if (latInput && lngInput && form) {
       latInput.value = position.coords.latitude;
       lngInput.value = position.coords.longitude;
-      
+
       console.log('📍 座標をフォームに設定:', {
         latitude: latInput.value,
         longitude: lngInput.value
       });
-      
+
       form.submit();
     } else {
       console.error('❌ フォーム要素が見つかりません');
@@ -136,9 +196,9 @@ async function handleServerSideSearch() {
     }
   } catch (e) {
     console.error('❌ 位置情報取得エラー:', e);
-    
+
     let message = '位置情報の取得に失敗しました';
-    
+
     if (e.code) {
       message = {
         [e.PERMISSION_DENIED]: '位置情報の利用が許可されていません',
@@ -146,7 +206,7 @@ async function handleServerSideSearch() {
         [e.TIMEOUT]: '位置情報の取得がタイムアウトしました'
       }[e.code] || message;
     }
-    
+
     alert(message);
   }
 }
@@ -157,12 +217,12 @@ async function handleServerSideSearch() {
 function handleSortChange(e) {
   const value = e.target.value;
   console.log('🔄 ソート切り替え:', value);
-  
+
   if (!window.currentResults) {
     console.warn('⚠️ 検索結果がありません');
     return;
   }
-  
+
   let results = [...window.currentResults];
 
   if (value === 'distance') {
@@ -183,14 +243,14 @@ function handleSortChange(e) {
 ================================ */
 function renderResults(restaurants) {
   console.log('🎨 検索結果を描画:', restaurants.length, '件');
-  
+
   const container = document.getElementById('search-results');
-  
+
   if (!container) {
     console.error('❌ search-results 要素が見つかりません');
     return;
   }
-  
+
   container.innerHTML = '';
 
   if (!restaurants.length) {
@@ -212,8 +272,8 @@ function renderResults(restaurants) {
     col.innerHTML = `
       <div class="card h-100 shadow-sm">
         ${r.photoUrl ? `
-          <img src="${r.photoUrl}" 
-               class="card-img-top" 
+          <img src="${r.photoUrl}"
+               class="card-img-top"
                alt="${r.name}"
                style="height:200px; object-fit:cover;"
                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
@@ -335,11 +395,11 @@ function showLoading(show) {
 function showError(message) {
   const box = document.getElementById('search-error');
   const msg = document.getElementById('search-error-message');
-  
+
   if (box && msg) {
     msg.textContent = message;
     box.style.display = 'block';
-    
+
     console.error('❌ エラー表示:', message);
   }
 }

@@ -5,7 +5,7 @@
         <i class="fas fa-search me-2"></i>レストラン検索
       </h2>
 
-      <!-- ★★★ Google Places API検索ボタン(最上部に追加) ★★★ -->
+      <!-- ★★★ Google Places API検索カード(気分選択機能追加版) ★★★ -->
       <div class="card mb-4 border-primary">
         <div class="card-body">
           <h5 class="card-title">
@@ -15,9 +15,45 @@
           <p class="text-muted mb-3">
             Google Places APIを使用して、現在地周辺のレストランを検索します
           </p>
-          <button id="search-by-current-location" class="btn btn-primary btn-lg">
+
+          <!-- ⭐ 気分選択フォーム -->
+          <div class="mb-3">
+            <label class="form-label fw-bold">今の気分は?</label>
+            <div class="row g-2">
+              <% Mood.all.each do |mood| %>
+                <div class="col-6 col-md-4 col-lg-3">
+                  <button type="button" 
+                          class="btn btn-outline-primary w-100 mood-btn" 
+                          data-mood-id="<%= mood[:id] %>"
+                          data-mood-name="<%= mood[:name] %>">
+                    <%= mood[:icon] %> <%= mood[:name] %>
+                  </button>
+                </div>
+              <% end %>
+            </div>
+          </div>
+
+          <!-- ⭐ 選択した気分を表示 -->
+          <div id="selected-mood" class="alert alert-info" style="display: none;">
+            <strong>選択中の気分:</strong> <span id="selected-mood-name"></span>
+          </div>
+
+          <!-- ⭐ 検索半径の選択 -->
+          <div class="mb-3">
+            <label for="google-places-radius" class="form-label">検索範囲</label>
+            <select id="google-places-radius" class="form-select">
+              <option value="0.5">500m</option>
+              <option value="1" selected>1km</option>
+              <option value="2">2km</option>
+              <option value="3">3km</option>
+              <option value="5">5km</option>
+            </select>
+          </div>
+
+          <button id="search-by-current-location" class="btn btn-primary btn-lg" disabled>
             <i class="fas fa-location-arrow me-2"></i>現在地から検索
           </button>
+          <small class="text-muted d-block mt-2">※まず気分を選択してください</small>
         </div>
       </div>
 
@@ -51,7 +87,7 @@
       <!-- ★★★ JS検索結果(Google Places API) ★★★ -->
       <div id="search-results" class="mb-4"></div>
 
- <!-- ★★★ サーバーサイド検索フォーム ★★★ -->
+        <!-- ★★★ サーバーサイド検索フォーム ★★★ -->
       <div class="card mb-4">
         <div class="card-body">
           <h5 class="card-title">
@@ -112,7 +148,7 @@
         </div>
       </div>
 
-         <!-- ★★★ サーバーサイド検索結果 ★★★ -->
+       <!-- ★★★ サーバーサイド検索結果 ★★★ -->
       <div id="server-side-results">
         <% if @restaurants.present? %>
           <h5 class="mb-3">
