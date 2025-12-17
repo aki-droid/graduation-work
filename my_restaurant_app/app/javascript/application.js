@@ -6,6 +6,7 @@ import "./controllers";
 import "./location";
 import "./moods_ui";
 import "./restaurant_search";
+import "./map";
 // Bootstrap
 import * as bootstrap from "bootstrap";
 

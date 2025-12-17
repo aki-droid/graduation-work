@@ -59,7 +59,7 @@ export async function searchRestaurants(
   latitude,
   longitude,
   moodId,
-  radius = 1000  // メートル単位
+  radius = 2000  // メートル単位
 ) {
   console.log('🔍 レストラン検索開始');
 
@@ -87,7 +87,8 @@ export async function searchRestaurants(
 
   // ⭐ 検索半径をkmに変換(距離フィルタリング用)
   const radiusKm = radius / 1000;
-  console.log('📏 フィルタリング用半径:', radiusKm, 'km');
+  const maxDistance = radiusKm * 1.5;
+  console.log('📏 フィルタリング用半径:', maxDistance, 'km');
 
   // バリデーション
   if (isNaN(lat) || isNaN(lng)) {
@@ -188,7 +189,7 @@ export async function searchRestaurants(
             console.log(`📏 ${name}: ${distance.toFixed(2)} km`);
 
             // 半径内かチェック
-            return distance <= radiusKm;
+            return distance <= (radiusKm * 1.5);
           });
 
           console.log('📏 距離フィルタ後:', filteredPlaces.length, '件');
@@ -233,9 +234,14 @@ export async function searchRestaurants(
             let photoUrl = null;
             if (place.photos && place.photos.length > 0) {
               const photo = place.photos[0];
-              if (typeof photo.getUrl === 'function') {
-                photoUrl = photo.getUrl({ maxWidth: 400, maxHeight: 300 });
+              if (typeof photo.getURI === 'function') {
+                photoUrl = photo.getURI({ maxWidth: 400, maxHeight: 300 });
+                console.log('🖼️ 写真URL生成:', photoUrl);
+              } else {
+                console.warn('⚠️ getURI()が利用できません:', photo);
               }
+            } else {
+              console.log('⚠️ 写真データがありません:', name);
             }
 
             return {
