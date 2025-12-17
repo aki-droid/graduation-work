@@ -116,7 +116,7 @@ async function handleGoogleSearch() {
 
     // ⭐ 検索半径を取得
     const radiusSelect = document.getElementById('google-places-radius');
-    const radiusKm = radiusSelect ? parseFloat(radiusSelect.value) : 1;
+    const radiusKm = radiusSelect ? parseFloat(radiusSelect.value) : 2;
     const radiusMeters = radiusKm * 1000;
 
     console.log('📏 検索半径:', radiusKm, 'km (', radiusMeters, 'm)');

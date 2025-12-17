@@ -233,3 +233,238 @@
   <!-- .row の閉じタグ -->
 </div>
 <!-- .container の閉じタグ -->
+
+<!-- ========================================
+     Google Places API 検索機能
+     ======================================== -->
+<script type="module">
+  import { searchRestaurants, sortByDistance, sortByRating, calculateDistance } from '/app/javascript/restaurant_search.js';
+
+  console.log('✅ search.html.erb のスクリプトが読み込まれました');
+
+  // DOM要素の取得
+  const searchButton = document.getElementById('search-by-current-location');
+  const resultsContainer = document.getElementById('search-results');
+  const loadingElement = document.getElementById('search-loading');
+  const errorElement = document.getElementById('search-error');
+  const errorMessage = document.getElementById('search-error-message');
+  const sortControls = document.getElementById('sort-controls');
+  const sortSelect = document.getElementById('sort-select');
+  const moodButtons = document.querySelectorAll('.mood-btn');
+  const selectedMoodDiv = document.getElementById('selected-mood');
+  const selectedMoodName = document.getElementById('selected-mood-name');
+
+  let selectedMoodId = null;
+  let currentResults = [];
+  let userLocation = null;
+
+  // ローディング表示・非表示
+  function showLoading() {
+    loadingElement.style.display = 'block';
+    resultsContainer.innerHTML = '';
+    errorElement.style.display = 'none';
+    sortControls.style.display = 'none';
+  }
+
+  function hideLoading() {
+    loadingElement.style.display = 'none';
+  }
+
+  function showError(message) {
+    errorMessage.textContent = message;
+    errorElement.style.display = 'block';
+    resultsContainer.innerHTML = '';
+    sortControls.style.display = 'none';
+  }
+
+  // 気分選択
+  moodButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      moodButtons.forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+      selectedMoodId = this.dataset.moodId;
+      selectedMoodName.textContent = this.dataset.moodName;
+      selectedMoodDiv.style.display = 'block';
+      searchButton.disabled = false;
+      console.log('😊 選択された気分ID:', selectedMoodId);
+    });
+  });
+
+  // 検索ボタンクリック
+  searchButton.addEventListener('click', async function() {
+    if (!selectedMoodId) {
+      alert('気分を選択してください');
+      return;
+    }
+
+    if (!navigator.geolocation) {
+      showError('お使いのブラウザは位置情報に対応していません');
+      return;
+    }
+
+    showLoading();
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        userLocation = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        };
+
+        console.log('📍 現在地:', userLocation);
+
+        try {
+          const radius = parseFloat(document.getElementById('google-places-radius').value) * 1000;
+          const restaurants = await searchRestaurants(
+            userLocation.latitude,
+            userLocation.longitude,
+            selectedMoodId,
+            radius
+          );
+
+          currentResults = restaurants;
+          displayResults(restaurants);
+          hideLoading();
+        } catch (error) {
+          console.error('❌ 検索エラー:', error);
+          showError('検索中にエラーが発生しました: ' + error.message);
+          hideLoading();
+        }
+      },
+      (error) => {
+        console.error('❌ 位置情報取得エラー:', error);
+        showError('位置情報の取得に失敗しました。位置情報を有効にしてください。');
+        hideLoading();
+      }
+    );
+  });
+
+  // ソート切り替え
+  sortSelect.addEventListener('change', function() {
+    const sortType = this.value;
+    if (sortType === 'distance') {
+      const sorted = sortByDistance([...currentResults], userLocation);
+      displayResults(sorted);
+    } else if (sortType === 'rating') {
+      const sorted = sortByRating([...currentResults]);
+      displayResults(sorted);
+    }
+  });
+
+  // 検索結果を表示
+  function displayResults(restaurants) {
+    if (restaurants.length === 0) {
+      resultsContainer.innerHTML = `
+        <div class="alert alert-info">
+          <i class="fas fa-info-circle me-2"></i>
+          該当するレストランが見つかりませんでした
+        </div>
+      `;
+      sortControls.style.display = 'none';
+      return;
+    }
+
+    sortControls.style.display = 'block';
+
+    let html = `
+      <h5 class="mb-3">
+        <i class="fas fa-map-marker-alt me-2"></i>周辺のレストラン
+        <span class="badge bg-primary">${restaurants.length}件</span>
+      </h5>
+      <div class="row">
+    `;
+
+    restaurants.forEach(restaurant => {
+      const distance = userLocation ? 
+        calculateDistance(
+          userLocation.latitude,
+          userLocation.longitude,
+          restaurant.latitude,
+          restaurant.longitude
+        ) : null;
+
+      html += `
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card h-100">
+            ${restaurant.photoUrl ? `
+              <img src="${restaurant.photoUrl}" 
+                   class="card-img-top" 
+                   alt="${restaurant.name}"
+                   style="height: 200px; object-fit: cover;"
+                   onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'bg-light d-flex align-items-center justify-content-center\\' style=\\'height: 200px;\\'><i class=\\'fas fa-utensils fa-3x text-muted\\'></i></div>';">
+            ` : `
+              <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                <i class="fas fa-utensils fa-3x text-muted"></i>
+              </div>
+            `}
+            
+            <div class="card-body">
+              <h5 class="card-title">${restaurant.name}</h5>
+              
+              ${restaurant.rating ? `
+                <div class="mb-2">
+                  <span class="badge bg-warning text-dark">
+                    <i class="fas fa-star"></i> ${restaurant.rating}
+                  </span>
+                </div>
+              ` : ''}
+              
+              <p class="card-text">
+                <small class="text-muted">
+                  <i class="fas fa-map-marker-alt me-1"></i>
+                  ${restaurant.address}
+                </small>
+              </p>
+              
+              ${distance ? `
+                <p class="card-text">
+                  <span class="badge bg-success">
+                    <i class="fas fa-walking me-1"></i>
+                    約 ${distance}km
+                  </span>
+                </p>
+              ` : ''}
+            </div>
+
+<div class="card-footer">
+              <a href="https://www.google.com/maps/search/?api=1&query=${restaurant.latitude},${restaurant.longitude}" 
+                 target="_blank" 
+                 class="btn btn-primary btn-sm">
+                <i class="fas fa-map-marker-alt me-2"></i>地図で見る
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    html += `
+      </div>
+    `;
+
+    resultsContainer.innerHTML = html;
+  }
+
+  // サーバーサイド検索の現在地ボタン
+  const serverSideButton = document.getElementById('server-side-current-location');
+  if (serverSideButton) {
+    serverSideButton.addEventListener('click', function() {
+      if (!navigator.geolocation) {
+        alert('お使いのブラウザは位置情報に対応していません');
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          document.getElementById('latitude').value = position.coords.latitude;
+          document.getElementById('longitude').value = position.coords.longitude;
+          document.getElementById('searchForm').submit();
+        },
+        (error) => {
+          console.error('位置情報取得エラー:', error);
+          alert('位置情報の取得に失敗しました');
+        }
+      );
+    });
+  }
+</script>

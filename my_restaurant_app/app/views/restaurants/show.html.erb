@@ -64,6 +64,27 @@
         </div>
       <% end %>
 
+      <!-- Googleマップで開くボタン -->
+      <div class="card mt-3">
+        <div class="card-body text-center">
+          <% if @restaurant.latitude.present? && @restaurant.longitude.present? %>
+            <%= link_to "https://www.google.com/maps/search/?api=1&query=#{@restaurant.latitude},#{@restaurant.longitude}",
+                target: "_blank",
+                rel: "noopener noreferrer",
+                class: "btn btn-primary w-100" do %>
+              <i class="fas fa-map-marked-alt me-2"></i>Googleマップで開く
+            <% end %>
+          <% else %>
+            <%= link_to "https://www.google.com/maps/search/?api=1&query=#{CGI.escape(@restaurant.address)}",
+                target: "_blank",
+                rel: "noopener noreferrer",
+                class: "btn btn-primary w-100" do %>
+              <i class="fas fa-map-marked-alt me-2"></i>Googleマップで検索
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+
       <!-- 追加情報カード -->
       <div class="card mt-3">
         <div class="card-body">
