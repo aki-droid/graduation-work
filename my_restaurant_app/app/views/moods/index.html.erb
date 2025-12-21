@@ -53,21 +53,6 @@
 </style>
 
 <script>
-  // 位置情報を取得
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      function(position) {
-        document.getElementById('latitude').value = position.coords.latitude;
-        document.getElementById('longitude').value = position.coords.longitude;
-        console.log('位置情報取得成功:', position.coords.latitude, position.coords.longitude);
-      },
-      function(error) {
-        console.error('位置情報取得エラー:', error);
-        alert('位置情報の取得に失敗しました。位置情報を許可してください。');
-      }
-    );
-  }
-
   // 気分カードがクリックされたときの処理
   document.querySelectorAll('.mood-card').forEach(function(card) {
     card.addEventListener('click', function() {

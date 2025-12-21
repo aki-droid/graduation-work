@@ -1,55 +1,28 @@
-<!-- app/views/shared/_footer.html.erb -->
 <footer class="bg-dark text-light py-4 mt-5">
   <div class="container">
     <div class="row">
-      <!-- 会社情報 -->
-      <div class="col-md-4 mb-3">
-        <h5 class="text-warning">My Restaurant</h5>
-        <p class="mb-2">美味しい料理と素敵な時間をお届けします</p>
-        <p class="mb-1">
-          <i class="fas fa-map-marker-alt me-2"></i>
-          東京都渋谷区〇〇 1-2-3
-        </p>
-        <p class="mb-1">
-          <i class="fas fa-phone me-2"></i>
-          03-1234-5678
-        </p>
-      </div>
-      
-      <!-- クイックリンク -->
-      <div class="col-md-4 mb-3">
-        <h6>クイックリンク</h6>
-        <ul class="list-unstyled">
-          <li class="mb-1"><%= link_to "ホーム", root_path, class: "text-light text-decoration-none" %></li>
-          <li class="mb-1"><%= link_to "メニュー", "#", class: "text-light text-decoration-none" %></li>
-          <li class="mb-1"><%= link_to "レストラン一覧", "#", class: "text-light text-decoration-none" %></li>
-          <li class="mb-1"><%= link_to "お問い合わせ", "#", class: "text-light text-decoration-none" %></li>
+      <!-- リンクエリア -->
+      <div class="col-12 text-center mb-3">
+        <ul class="list-inline mb-0">
+          <li class="list-inline-item mx-2">
+            <%= link_to "利用規約", terms_path, class: "text-light text-decoration-none" %>
+          </li>
+          <li class="list-inline-item mx-2">|</li>
+          <li class="list-inline-item mx-2">
+            <%= link_to "プライバシーポリシー", privacy_path, class: "text-light text-decoration-none" %>
+          </li>
+          <li class="list-inline-item mx-2">|</li>
+          <li class="list-inline-item mx-2">
+            <%= link_to "お問い合わせ", contact_path, class: "text-light text-decoration-none" %>
+          </li>
         </ul>
       </div>
-      
-      <!-- ソーシャルメディア -->
-      <div class="col-md-4 mb-3">
-        <h6>フォローする</h6>
-        <div class="d-flex gap-3">
-          <a href="#" class="text-light">
-            <i class="fab fa-facebook-f fa-lg"></i>
-          </a>
-          <a href="#" class="text-light">
-            <i class="fab fa-twitter fa-lg"></i>
-          </a>
-          <a href="#" class="text-light">
-            <i class="fab fa-instagram fa-lg"></i>
-          </a>
-        </div>
-      </div>
     </div>
-    
-    <hr class="my-3">
     
     <!-- コピーライト -->
     <div class="row">
       <div class="col-12 text-center">
-        <p class="mb-0">&copy; <%= Date.current.year %> My Restaurant. All rights reserved.</p>
+        <p class="mb-0">&copy; <%= Date.current.year %> Kibun Gohan. All rights reserved.</p>
       </div>
     </div>
   </div>

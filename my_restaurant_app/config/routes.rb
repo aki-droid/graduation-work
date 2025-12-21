@@ -1,11 +1,19 @@
 Rails.application.routes.draw do
+  get 'pages/terms'
+  get 'pages/privacy'
+  get 'pages/contact'
   devise_for :users
   root "restaurants#index"
+
+  # 🆕 静的ページ（利用規約・プライバシーポリシー・お問い合わせ）
+  get 'terms', to: 'pages#terms'
+  get 'privacy', to: 'pages#privacy'
+  get 'contact', to: 'pages#contact'
 
   # 🆕 気分選択機能
   resources :moods, only: [:index] do
     collection do
-      post :select  # 気分を選択する
+      post :select
     end
   end
 
@@ -16,7 +24,7 @@ Rails.application.routes.draw do
     end
 
     member do
-      get :bookmarks  # 将来実装予定
+      get :bookmarks
     end
   end
 
