@@ -3,6 +3,7 @@ console.log('📍 location.js loaded');
 import { searchRestaurants } from './restaurant_search';
 
 let initialized = false;
+let userTriggeredSearch = false;
 
 // Turbo遷移前に初期化フラグをリセット
 document.addEventListener("turbo:before-render", () => {
@@ -12,7 +13,6 @@ document.addEventListener("turbo:before-render", () => {
 
 // 初期化処理
 document.addEventListener("turbo:load", init);
-document.addEventListener("DOMContentLoaded", init);
 
 function init() {
   if (initialized) {
@@ -22,6 +22,7 @@ function init() {
   initialized = true;
 
   console.log('🔄 位置情報機能 初期化');
+  clearError();
 
   // ソートコントロールを初期非表示
   const sortControls = document.getElementById('sort-controls');
@@ -97,6 +98,7 @@ function handleMoodSelection(e) {
 ================================ */
 async function handleGoogleSearch() {
   console.log('🔍 Google Places API検索を開始');
+  userTriggeredSearch = true;
 
   // ⭐ 気分が選択されているか確認
   if (!window.selectedMoodId) {
@@ -149,19 +151,22 @@ async function handleGoogleSearch() {
     renderResults(window.currentResults);
 
   } catch (e) {
-    console.error('❌ 検索エラー:', e);
+  console.error('❌ 検索エラー:', e);
 
-    let message = '検索中にエラーが発生しました';
+  let message = '検索中にエラーが発生しました';
 
-    if (e.code) {
-      message = {
-        [e.PERMISSION_DENIED]: '位置情報の利用が許可されていません',
-        [e.POSITION_UNAVAILABLE]: '位置情報を取得できませんでした',
-        [e.TIMEOUT]: '位置情報の取得がタイムアウトしました'
-      }[e.code] || message;
-    }
+  if (e.code) {
+    message = {
+      [e.PERMISSION_DENIED]: '位置情報の利用が許可されていません',
+      [e.POSITION_UNAVAILABLE]: '位置情報を取得できませんでした',
+      [e.TIMEOUT]: '位置情報の取得がタイムアウトしました'
+    }[e.code] || message;
+  }
 
+  // ⭐ ユーザー操作があった時だけエラー表示
+  if (userTriggeredSearch) {
     showError(message);
+  }
   } finally {
     showLoading(false);
   }
@@ -172,6 +177,7 @@ async function handleGoogleSearch() {
 ================================ */
 async function handleServerSideSearch() {
   console.log('🔍 サーバーサイド検索を開始');
+  userTriggeredSearch = true;
 
   try {
     const position = await getPosition();
@@ -192,7 +198,7 @@ async function handleServerSideSearch() {
       form.submit();
     } else {
       console.error('❌ フォーム要素が見つかりません');
-      alert('検索フォームが見つかりませんでした');
+      showError('検索フォームが見つかりませんでした');
     }
   } catch (e) {
     console.error('❌ 位置情報取得エラー:', e);
@@ -207,7 +213,9 @@ async function handleServerSideSearch() {
       }[e.code] || message;
     }
 
-    alert(message);
+    if (userTriggeredSearch) {
+      showError(message);
+    }
   }
 }
 

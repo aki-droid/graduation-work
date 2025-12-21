@@ -2,12 +2,49 @@ console.log("😊 moods_ui.js loaded");
 
 // 気分とレストランタイプのマッピング
 const moodMapping = {
-  1: ['restaurant', 'cafe', 'bar'],
-  2: ['cafe', 'bakery', 'spa'],
-  3: ['gym', 'sports_club', 'stadium'],
-  4: ['restaurant', 'bar', 'night_club'],
-  5: ['restaurant', 'meal_takeaway', 'food'],
-  6: ['tourist_attraction', 'amusement_park']
+  1: [ // 元気
+    'restaurant',
+    'cafe'
+  ],
+
+  2: [ // 疲れた
+    'restaurant',
+    'cafe'
+  ],
+
+  3: [ // おちこんでいる
+    'cafe',
+    'bakery',
+    'restaurant'
+  ],
+
+  4: [ // がっつり食べたい
+    'restaurant',
+    'meal_takeaway'
+  ],
+
+  5: [ // 軽く済ませたい
+    'meal_takeaway',
+    'cafe',
+    'restaurant'
+  ],
+
+  6: [ // おしゃれしたい
+    'restaurant',
+    'bar',
+    'night_club'
+  ],
+
+  7: [ // ワイワイしたい
+    'bar',
+    'restaurant',
+    'night_club'
+  ],
+
+  8: [ // まったりしたい
+    'cafe',
+    'bakery'
+  ]
 };
 
 document.addEventListener('turbo:load', () => {
