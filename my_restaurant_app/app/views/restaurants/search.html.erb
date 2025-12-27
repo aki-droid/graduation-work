@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-12">
       <h2 class="mb-4">
-        <i class="fas fa-search me-2"></i>レストラン検索
+        <i class="fas fa-search me-2"></i>お店を検索
       </h2>
 
       <!-- ★★★ Google Places API検索カード(気分選択機能追加版) ★★★ -->
@@ -10,11 +10,8 @@
         <div class="card-body">
           <h5 class="card-title">
             <i class="fas fa-map-marked-alt me-2 text-primary"></i>
-            現在地周辺のレストランを検索
+            現在地周辺のお店を検索
           </h5>
-          <p class="text-muted mb-3">
-            Google Places APIを使用して、現在地周辺のレストランを検索します
-          </p>
 
           <!-- ⭐ 気分選択フォーム -->
           <div class="mb-3">
@@ -22,8 +19,8 @@
             <div class="row g-2">
               <% Mood.all.each do |mood| %>
                 <div class="col-6 col-md-4 col-lg-3">
-                  <button type="button" 
-                          class="btn btn-outline-primary w-100 mood-btn" 
+                  <button type="button"
+                          class="btn w-100 mood-btn"
                           data-mood-id="<%= mood[:id] %>"
                           data-mood-name="<%= mood[:name] %>">
                     <%= mood[:icon] %> <%= mood[:name] %>
@@ -93,7 +90,7 @@
         <div class="card-body">
           <h5 class="card-title">
             <i class="fas fa-database me-2"></i>
-            登録済みレストランから検索
+            登録済みお店から検索
           </h5>
           <%= form_with url: search_restaurants_path, method: :get, local: true, id: "searchForm" do |f| %>
             <div class="row mb-3">

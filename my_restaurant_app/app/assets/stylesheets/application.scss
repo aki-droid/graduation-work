@@ -1,180 +1,151 @@
-@import "bootstrap";
-@import "moods";
-
-// ===========================================
-// カスタムカラーパレット（レストランアプリ用）
-// ===========================================
+/* ===========================================
+   Bootstrap & アプリ共通カラーパレット
+=========================================== */
 :root {
-  --primary-color: #e74c3c;        // レストランらしい赤
-  --secondary-color: #34495e;       // 落ち着いたグレー
-  --accent-color: #f39c12;          // アクセントのオレンジ
-  --success-color: #27ae60;         // 成功時の緑
-  --background-color: #f8f9fa;      // 背景色
-  --text-color: #2c3e50;            // テキスト色
-  --card-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  --primary-color: #F97316;
+  --secondary-color: #7C2D12;
+  --accent-color: #FACC15;
+  --success-color: #22C55E;
+  --background-color: #FFF7ED;
+  --text-color: #3F3F46;
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-// ===========================================
-// 基本スタイル
-// ===========================================
+/* ===========================================
+   Bootstrap
+=========================================== */
+@import "bootstrap";
+
+/* ===========================================
+   自作スタイル
+=========================================== */
+@import "moods";
+
+/* ===========================================
+   基本スタイル
+=========================================== */
 body {
-  font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+  font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN',
+               'Hiragino Sans', Meiryo, sans-serif;
   background-color: var(--background-color);
   color: var(--text-color);
   line-height: 1.6;
 }
 
-// ===========================================
-// ナビゲーション
-// ===========================================
-.navbar-brand {
-  font-weight: bold;
-  font-size: 1.5rem;
-  color: var(--primary-color) !important;
-  
-  &:hover {
-    color: #c0392b !important;
-  }
-}
-
-.navbar {
+/* ===========================================
+   ナビゲーション（ログイン後）
+=========================================== */
+.custom-navbar {
+  background-color: var(--background-color);
   box-shadow: var(--card-shadow);
 }
 
-// ===========================================
-// ボタンカスタマイズ
-// ===========================================
-.btn-primary {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
-  
-  &:hover, &:focus {
-    background-color: #c0392b;
-    border-color: #c0392b;
-  }
+.custom-navbar .container {
+  max-width: 1200px;
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.btn-outline-primary {
-  color: var(--primary-color);
-  border-color: var(--primary-color);
-  
-  &:hover {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-  }
+.custom-navbar .logo-img {
+  max-height: 90px;
+  width: auto;
+  object-fit: contain;
 }
 
-// ===========================================
-// カードスタイル
-// ===========================================
-.card {
-  border: none;
-  box-shadow: var(--card-shadow);
-  transition: all 0.3s ease-in-out;
-  
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  }
+.custom-navbar .navbar-collapse {
+  display: flex;
+  justify-content: flex-end;
 }
 
-.card-header {
-  background-color: #fff;
-  border-bottom: 1px solid #e9ecef;
+.custom-navbar .btn {
   font-weight: 600;
 }
 
-// ===========================================
-// ヒーローセクション
-// ===========================================
-.hero-section {
-  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-  color: white;
-  padding: 4rem 0;
-  text-align: center;
-  
-  h1 {
-    font-size: 3rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-  }
-  
-  p {
-    font-size: 1.2rem;
-    opacity: 0.9;
-  }
+/* ===========================================
+   ログイン前ヘッダー（★完全修正版）
+=========================================== */
+.before-login-header {
+  width: 100%;
+  background-color: var(--background-color);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
 }
 
-// ===========================================
-// フラッシュメッセージ
-// ===========================================
-.alert {
-  border: none;
-  border-radius: 8px;
-  margin-bottom: 0;
+/* 中身を固定幅＋左右固定 */
+.before-login-header .inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.alert-success {
-  background-color: #d4edda;
-  color: #155724;
+/* ロゴ（左固定） */
+.before-login-header .logo-img {
+  max-height: 80px;
+  width: auto;
+  object-fit: contain;
 }
 
-.alert-danger {
-  background-color: #f8d7da;
-  color: #721c24;
+/* ボタン（右固定） */
+.before-login-header .btn {
+  font-weight: 600;
 }
 
-// ===========================================
-// レスポンシブ設定
-// ===========================================
-@media (max-width: 768px) {
-  .hero-section {
-    padding: 2rem 0;
-    
-    h1 {
-      font-size: 2rem;
-    }
-    
-    p {
-      font-size: 1rem;
-    }
-  }
-  
-  .container {
-    padding: 0 15px;
-  }
-  
-  .navbar-brand {
-    font-size: 1.2rem;
-  }
-  
-  .card {
-    margin-bottom: 1rem;
-  }
-}
-
+/* スマホだけ縦並び */
 @media (max-width: 576px) {
-  .hero-section h1 {
-    font-size: 1.8rem;
-  }
-  
-  .btn {
-    width: 100%;
-    margin-bottom: 0.5rem;
+  .before-login-header .inner {
+    flex-direction: column;
+    gap: 0.75rem;
   }
 }
 
-// ===========================================
-// ユーティリティクラス
-// ===========================================
+/* ===========================================
+   気分選択ボタン
+=========================================== */
+.mood-btn {
+  border-color: var(--accent-color) !important;
+  background-color: #FFF7ED !important;
+  color: #000 !important;
+  font-weight: 600;
+}
+
+.mood-btn:hover {
+  background-color: var(--accent-color) !important;
+}
+
+/* ===========================================
+   カード共通
+=========================================== */
+.card {
+  border: none;
+  border-radius: 1rem;
+  box-shadow: var(--card-shadow);
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+/* ===========================================
+   フラッシュメッセージ
+=========================================== */
+.alert {
+  border-radius: 0.75rem;
+}
+
+/* ===========================================
+   ユーティリティ
+=========================================== */
 .text-primary-custom {
   color: var(--primary-color) !important;
 }
 
 .bg-primary-custom {
   background-color: var(--primary-color) !important;
-}
-
-.shadow-custom {
-  box-shadow: var(--card-shadow) !important;
 }

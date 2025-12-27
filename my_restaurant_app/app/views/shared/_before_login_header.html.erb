@@ -1,62 +1,89 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+<nav class="navbar navbar-expand-lg shadow-sm custom-navbar">
   <div class="container">
-    <%= link_to "🍚 きぶんご飯", root_path, class: "navbar-brand" %>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+    <!-- ロゴ（左固定） -->
+    <%= link_to root_path, class: "navbar-brand d-flex align-items-center" do %>
+      <%= image_tag "kibun_gohan_logo.png",
+            alt: "きぶんご飯",
+            class: "logo-img" %>
+    <% end %>
+
+    <!-- ハンバーガーメニュー（モバイル用） -->
+    <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-      <ul class="navbar-nav">
+    <!-- メニュー（右固定） -->
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav gap-2 align-items-center">
         <li class="nav-item">
-          <%= link_to "🔑 ログイン", new_user_session_path, class: "btn btn-outline-light btn-sm me-2" %>
+          <%= link_to "🔑 ログイン",
+            new_user_session_path,
+            class: "btn btn-outline-warning btn-sm" %>
         </li>
         <li class="nav-item">
-          <%= link_to "✨ 新規登録", new_user_registration_path, class: "btn btn-light btn-sm" %>
+          <%= link_to "✨ 新規登録",
+            new_user_registration_path,
+            class: "btn btn-warning btn-sm" %>
         </li>
       </ul>
     </div>
+
   </div>
 </nav>
 
 <% unless user_signed_in? %>
-  <!-- navbar直下の説明エリア -->
-  <div class="bg-primary bg-opacity-10 border-bottom">
-    <div class="container py-5 text-center">
+  <div class="before-login-header">
+    <div class="container text-center py-5">
 
       <!-- キャッチコピー -->
-      <h5 class="mb-2">🍽 今の気分で、近くのお店を</h5>
+      <h5 class="mb-2">🍽 今の気分で、近くのお店を。</h5>
       <p class="text-muted mb-4 small">
-        現在地 × 気分で、あなたにぴったりのレストランを見つけます
+        現在地と気分から、ぴったりのお店が見つかります
       </p>
 
-      <!-- 使い方（トップページの説明） -->
-      <div class="row justify-content-center mb-4">
-        <div class="col-md-3 col-6 mb-3">
-          <div class="p-3 bg-white rounded shadow-sm h-100">
-            <div class="fs-3 mb-2">📍</div>
-            <p class="small mb-0">現在地を取得</p>
-          </div>
-        </div>
-
-        <div class="col-md-3 col-6 mb-3">
-          <div class="p-3 bg-white rounded shadow-sm h-100">
-            <div class="fs-3 mb-2">😊</div>
-            <p class="small mb-0">気分を選ぶ</p>
-          </div>
-        </div>
-
-        <div class="col-md-3 col-6 mb-3">
-          <div class="p-3 bg-white rounded shadow-sm h-100">
-            <div class="fs-3 mb-2">🍽</div>
-            <p class="small mb-0">お店をチェック</p>
-          </div>
-        </div>
+      <!-- 使い方（ログイン前） -->
+  <div class="row justify-content-center mb-4 g-3">
+    <div class="col-md-3 col-6">
+      <div class="card p-3 h-100 text-center">
+        <div class="fs-3 mb-2">📍</div>
+        <p class="fw-semibold mb-1">① 現在地を取得</p>
+        <p class="text-muted small mb-0">
+          今いる場所から近くのお店を探します
+        </p>
       </div>
+    </div>
 
-      <!-- CTA（ログイン必須） -->
+    <div class="col-md-3 col-6">
+      <div class="card p-3 h-100 text-center">
+        <div class="fs-3 mb-2">😊</div>
+        <p class="fw-semibold mb-1">② 気分を選ぶ</p>
+        <p class="text-muted small mb-0">
+          がっつり・軽めなど、今の気分を選択
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-6">
+      <div class="card p-3 h-100 text-center">
+        <div class="fs-3 mb-2">🍽</div>
+        <p class="fw-semibold mb-1">③ お店をチェック</p>
+        <p class="text-muted small mb-0">
+          気分に合ったお店が表示されます
+        </p>
+      </div>
+    </div>
+  </div>
+
+      <!-- CTA -->
       <%= link_to new_user_session_path,
-          class: "btn btn-primary btn-sm px-4" do %>
-        ログインして使ってみる
+          class: "btn btn-warning btn-sm px-4" do %>
+        ログインして使う
       <% end %>
 
       <p class="text-muted small mt-3 mb-0">
