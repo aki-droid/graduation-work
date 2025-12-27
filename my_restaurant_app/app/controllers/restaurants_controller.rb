@@ -21,7 +21,7 @@ class RestaurantsController < ApplicationController
     @restaurant = current_user.restaurants.build(restaurant_params)
 
     if @restaurant.save
-      redirect_to @restaurant, notice: 'レストランが正常に作成されました。'
+      redirect_to @restaurant, notice: 'お店が正常に作成されました。'
     else
       render :new, status: :unprocessable_entity
     end
@@ -29,7 +29,7 @@ class RestaurantsController < ApplicationController
 
   def update
     if @restaurant.update(restaurant_params)
-      redirect_to @restaurant, notice: 'レストランが正常に更新されました。'
+      redirect_to @restaurant, notice: 'お店が正常に更新されました。'
     else
       render :edit, status: :unprocessable_entity
     end
@@ -37,7 +37,7 @@ class RestaurantsController < ApplicationController
 
   def destroy
     @restaurant.destroy
-    redirect_to restaurants_url, notice: 'レストランが正常に削除されました。'
+    redirect_to restaurants_url, notice: 'お店が正常に削除されました。'
   end
 
   def search
@@ -108,7 +108,7 @@ end
   end
 
   # 🚧 MVP後に実装予定
-  # 登録済みレストランから検索
+  # 登録済みのお店から検索
   #def search_registered_restaurants
     #@restaurants = Restaurant.all
 
