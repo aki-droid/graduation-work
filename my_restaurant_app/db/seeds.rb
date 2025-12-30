@@ -59,7 +59,6 @@ restaurants_data = [
 
 Restaurant.destroy_all
 
-# ★★★ ここを修正 ★★★
 restaurants_data.each do |data|
   # geocodeを無効化してレストランを作成
   restaurant = Restaurant.new(data)

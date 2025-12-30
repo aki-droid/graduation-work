@@ -41,14 +41,14 @@ class RestaurantsController < ApplicationController
   end
 
   def search
-  # ⭐ 初回表示 or 条件不足なら何もしない
+  #  初回表示 or 条件不足なら何もしない
   unless params[:mood].present?
     @google_places = []
     @restaurants = []
     return
   end
 
-  # ⭐ 気分はあるが位置情報がない場合
+  #  気分はあるが位置情報がない場合
   if !params[:latitude].present? || !params[:longitude].present?
     @google_places = []
     @restaurants = []
@@ -60,7 +60,7 @@ class RestaurantsController < ApplicationController
   @longitude = params[:longitude].to_f
   @radius    = (params[:radius]&.to_f || 1.0) * 1000
 
-  # ⭐ Google Places 検索のみ
+  #  Google Places 検索のみ
   if params[:use_google_places] == 'true'
     search_with_google_places
   end
@@ -82,7 +82,7 @@ end
     )
   end
 
-  # ⭐ Google Places APIを使った検索(修正版)
+  #  Google Places APIを使った検索
   def search_with_google_places
     mood_id = params[:mood].to_i
 
@@ -107,7 +107,7 @@ end
     end
   end
 
-  # 🚧 MVP後に実装予定
+  #  MVP後に実装予定
   # 登録済みのお店から検索
   #def search_registered_restaurants
     #@restaurants = Restaurant.all

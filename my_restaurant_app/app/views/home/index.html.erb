@@ -1,62 +1,53 @@
-<div class="container mt-5">
-  <div class="alert alert-success" role="alert">
-    <h4 class="alert-heading">Bootstrap is working! 🎉</h4>
-    <p>レストラン検索アプリの準備が整いました。</p>
-    <hr>
-    <p class="mb-0">Rails <%= Rails.version %> と Ruby <%= RUBY_VERSION %> で動作しています。</p>
+<div class="container py-5 text-center">
+
+  <!-- キャッチコピー -->
+  <h4 class="mb-2 fw-semibold">今の気分で、近くのお店を。</h4>
+  <p class="text-muted mb-5 small">
+    現在地と気分から、ぴったりのお店が見つかります
+  </p>
+
+  <!-- 使い方 -->
+  <div class="row justify-content-center mb-5 g-4">
+
+    <div class="col-md-4">
+      <div class="p-4 border rounded h-100">
+        <div class="fs-2 mb-2">📍</div>
+        <h6 class="fw-semibold">① 現在地を取得</h6>
+        <p class="text-muted small mb-0">
+          今いる場所をもとに、近くのお店を探します
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="p-4 border rounded h-100">
+        <div class="fs-2 mb-2">😊</div>
+        <h6 class="fw-semibold">② 気分を選ぶ</h6>
+        <p class="text-muted small mb-0">
+          がっつり・軽くすませたいなど、今の気分を選択
+        </p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="p-4 border rounded h-100">
+        <div class="fs-2 mb-2">🍽</div>
+        <h6 class="fw-semibold">③ お店をチェック</h6>
+        <p class="text-muted small mb-0">
+          条件に合ったお店が一覧で表示されます
+        </p>
+      </div>
+    </div>
+
   </div>
 
-  <div class="row">
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">レストラン検索</h5>
-          <p class="card-text">近くのレストランを検索できます。</p>
-          <%= link_to "レストランを検索", restaurants_path, class: "btn btn-primary" %>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">レストラン登録</h5>
-          <p class="card-text">新しいレストランを登録できます。</p>
-          <%= link_to "レストランを登録", new_restaurant_path, class: "btn btn-success" %>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- CTA -->
+  <%= link_to "ログインして使う",
+      new_user_session_path,
+      class: "btn btn-warning btn-sm px-4" %>
 
-  <div class="mt-4">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">現在のシステム情報</h5>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">📊 <strong>Rails バージョン:</strong> <%= Rails.version %></li>
-          <li class="list-group-item">🔧 <strong>Ruby バージョン:</strong> <%= RUBY_DESCRIPTION %></li>
-          <li class="list-group-item">🌐 <strong>環境:</strong> <%= Rails.env %></li>
-          <li class="list-group-item">⏰ <strong>現在時刻:</strong> <%= Time.current %></li>
-        </ul>
-      </div>
-    </div>
-  </div>
+  <p class="text-muted small mt-3 mb-0">
+    ※ ご利用にはログインが必要です
+  </p>
 
-  <div class="mt-4">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">Issue #2 進行状況</h5>
-        <div class="progress mb-3">
-          <div class="progress-bar bg-success" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100">95%</div>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">✅ Bootstrap gem 追加・設定</li>
-          <li class="list-group-item">✅ bundle install 完了</li>
-          <li class="list-group-item">✅ MVC構造実装</li>
-          <li class="list-group-item">✅ ビューファイル作成</li>
-          <li class="list-group-item">🔧 Bootstrap動作確認 ← 最終確認中</li>
-          <li class="list-group-item">⏳ devise gem 追加・設定</li>
-        </ul>
-      </div>
-    </div>
-  </div>
 </div>

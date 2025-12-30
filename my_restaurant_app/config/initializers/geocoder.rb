@@ -4,7 +4,6 @@ Geocoder.configure(
   distances: :spherical,
   calculations: :spherical,
 
-  # ← これが超重要！（SQL の bearing 計算を完全に削除）
   calc_bearing: false,
 
   use_https: true,

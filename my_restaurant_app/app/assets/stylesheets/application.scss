@@ -43,7 +43,6 @@ body {
 .custom-navbar .container {
   max-width: 1200px;
   margin: 0 auto;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -65,7 +64,7 @@ body {
 }
 
 /* ===========================================
-   ログイン前ヘッダー（★完全修正版）
+   ログイン前ヘッダー
 =========================================== */
 .before-login-header {
   width: 100%;
@@ -73,30 +72,25 @@ body {
   border-bottom: 1px solid rgba(0,0,0,0.08);
 }
 
-/* 中身を固定幅＋左右固定 */
 .before-login-header .inner {
   max-width: 1200px;
   margin: 0 auto;
   padding: 1rem 2rem;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-/* ロゴ（左固定） */
 .before-login-header .logo-img {
   max-height: 80px;
   width: auto;
   object-fit: contain;
 }
 
-/* ボタン（右固定） */
 .before-login-header .btn {
   font-weight: 600;
 }
 
-/* スマホだけ縦並び */
 @media (max-width: 576px) {
   .before-login-header .inner {
     flex-direction: column;
@@ -119,16 +113,22 @@ body {
 }
 
 /* ===========================================
-   カード共通
+   カード共通（※動かさない）
 =========================================== */
 .card {
   border: none;
   border-radius: 1rem;
   box-shadow: var(--card-shadow);
-  transition: 0.3s;
 }
 
-.card:hover {
+/* ===========================================
+   hover させたいカード専用
+=========================================== */
+.hover-card {
+  transition: transform 0.3s ease;
+}
+
+.hover-card:hover {
   transform: translateY(-2px);
 }
 
@@ -148,4 +148,17 @@ body {
 
 .bg-primary-custom {
   background-color: var(--primary-color) !important;
+}
+
+/* ===========================================
+   フォーム入力欄（ズレ完全防止）
+=========================================== */
+.form-control {
+  border: 2px solid #ced4da;
+  box-sizing: border-box;
+}
+
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: none;
 }

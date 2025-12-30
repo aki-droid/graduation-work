@@ -28,8 +28,6 @@ class Restaurant < ApplicationRecord
     near([latitude, longitude], distance_in_km, units: :km, order: false)
   }
 
-  # search_by_location は削除済みでOK
-
   def distance_from(latitude, longitude)
     return nil unless self.latitude && self.longitude
 

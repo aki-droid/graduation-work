@@ -100,7 +100,7 @@ export async function searchRestaurants(
   console.log('⭐ 最低評価:', config.minRating);
   console.log('📏 検索半径:', radius, 'メートル');
 
-  // ⭐ 検索半径をkmに変換(距離フィルタリング用)
+  //  検索半径をkmに変換(距離フィルタリング用)
   const radiusKm = radius / 1000;
   const maxDistance = radiusKm * 1.5;
   console.log('📏 フィルタリング用半径:', maxDistance, 'km');
@@ -156,7 +156,7 @@ export async function searchRestaurants(
           console.log('✅ 検索成功:', places.length, '件');
 
           // ========================================
-          // ⭐ 評価でフィルタリング
+          // 評価でフィルタリング
           // ========================================
           let filteredPlaces = places.filter(place => {
             const rating = place.rating || 0;
@@ -166,7 +166,7 @@ export async function searchRestaurants(
           console.log('⭐ 評価フィルタ後:', filteredPlaces.length, '件');
 
           // ========================================
-          // ⭐⭐⭐ 距離フィルタリング(追加) ⭐⭐⭐
+          // 距離フィルタリング(追加)
           // ========================================
           filteredPlaces = filteredPlaces.filter(place => {
             // locationの取得

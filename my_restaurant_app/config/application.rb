@@ -11,12 +11,27 @@ module App
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 
-    # Configuration for the application, engines, and railties goes here.
-    #
-    # These settings can be overridden in specific environments using the files
-    # in config/environments, which are processed later.
-    #
-    # config.time_zone = "Central Time (US & Canada)"
+    # ==========================================
+    # 言語・エラーメッセージ統一設定
+    # ==========================================
+
+    # デフォルト言語を日本語にする
+    config.i18n.default_locale = :ja
+
+    # 利用可能な言語（日本語のみ）
+    config.i18n.available_locales = [:ja]
+
+    # locales 配下をすべて自動読み込み
+    config.i18n.load_path += Dir[
+      Rails.root.join("config", "locales", "**", "*.{rb,yml}")
+    ]
+
+    # ==========================================
+    # 時刻
+    # ==========================================
+    # config.time_zone = "Tokyo"
+    # config.active_record.default_timezone = :local
+
     # config.eager_load_paths << Rails.root.join("extras")
   end
 end

@@ -5,17 +5,9 @@
         <i class="fas fa-search me-2"></i>お店を検索
       </h2>
 
-      <!-- ★★★ Google Places API検索カード(気分選択機能追加版) ★★★ -->
-      <div class="card mb-4 border-primary">
-        <div class="card-body">
-          <h5 class="card-title">
-            <i class="fas fa-map-marked-alt me-2 text-primary"></i>
-            現在地周辺のお店を検索
-          </h5>
-
-          <!-- ⭐ 気分選択フォーム -->
+          <!-- 気分選択フォーム -->
           <div class="mb-3">
-            <label class="form-label fw-bold">今の気分は?</label>
+            <label class="form-label fw-bold">今の気分を選んでください</label>
             <div class="row g-2">
               <% Mood.all.each do |mood| %>
                 <div class="col-6 col-md-4 col-lg-3">
@@ -30,12 +22,12 @@
             </div>
           </div>
 
-          <!-- ⭐ 選択した気分を表示 -->
+          <!-- 選択した気分を表示 -->
           <div id="selected-mood" class="alert alert-info" style="display: none;">
             <strong>選択中の気分:</strong> <span id="selected-mood-name"></span>
           </div>
 
-          <!-- ⭐ 検索半径の選択 -->
+          <!-- 検索半径の選択 -->
           <div class="mb-3">
             <label for="google-places-radius" class="form-label">検索範囲</label>
             <select id="google-places-radius" class="form-select">
@@ -54,7 +46,7 @@
         </div>
       </div>
 
-      <!-- ★★★ ソート切り替えコントロール ★★★ -->
+      <!-- ソート切り替えコントロール -->
       <div id="sort-controls" class="mb-3" style="display: none;">
         <div class="d-flex align-items-center gap-2">
           <label for="sort-select" class="mb-0 fw-bold">並び順:</label>
@@ -65,7 +57,7 @@
         </div>
       </div>
 
-      <!-- ★★★ ローディング表示 ★★★ -->
+      <!--ローディング表示 -->
       <div id="search-loading" style="display: none;">
         <div class="d-flex justify-content-center align-items-center" style="min-height: 200px;">
           <div class="spinner-border text-primary" role="status">
@@ -75,17 +67,17 @@
         </div>
       </div>
 
-      <!-- ★★★ エラー表示 ★★★ -->
+      <!-- エラー表示 -->
       <div id="search-error" class="alert alert-danger" style="display: none;">
         <i class="fas fa-exclamation-circle me-2"></i>
         <span id="search-error-message"></span>
       </div>
 
-      <!-- ★★★ JS検索結果(Google Places API) ★★★ -->
+      <!--JS検索結果(Google Places API)-->
       <div id="search-results" class="mb-4"></div>
 
-　　　<% if false %>
-       <!-- ★★★ サーバーサイド検索フォーム MVP後に実装予定★★★ -->
+　　　　<% if false %>
+       <!--サーバーサイド検索フォーム MVP後に実装予定 -->
       <div class="card mb-4">
         <div class="card-body">
           <h5 class="card-title">
@@ -146,7 +138,7 @@
         </div>
       </div>
 
-       <!-- ★★★ サーバーサイド検索結果 ★★★ -->
+       <!--サーバーサイド検索結果-->
       <div id="server-side-results">
         <% if @restaurants.present? %>
           <h5 class="mb-3">
