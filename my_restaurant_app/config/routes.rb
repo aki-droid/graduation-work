@@ -1,23 +1,31 @@
 Rails.application.routes.draw do
-  get 'pages/terms'
-  get 'pages/privacy'
-  get 'pages/contact'
   devise_for :users
-  root "restaurants#index"
 
-  # 🆕 静的ページ（利用規約・プライバシーポリシー・お問い合わせ）
-  get 'terms', to: 'pages#terms'
+  # ログイン済みかどうかでルートを切り替える
+  authenticated :user do
+    root "restaurants#search", as: :authenticated_root
+  end
+
+  unauthenticated do
+    root "home#index", as: :unauthenticated_root
+  end
+
+   # 通常のroot
+  root "home#index"
+
+  # 静的ページ
+  get 'terms',   to: 'pages#terms'
   get 'privacy', to: 'pages#privacy'
   get 'contact', to: 'pages#contact'
 
-  # 🆕 気分選択機能
+  # 気分選択
   resources :moods, only: [:index] do
     collection do
       post :select
     end
   end
 
-  # レストラン関連（フルCRUD + search + bookmarks）
+  # レストラン関連
   resources :restaurants do
     collection do
       get :search
@@ -28,12 +36,9 @@ Rails.application.routes.draw do
     end
   end
 
-  # 位置情報関連
+  # 位置情報
   resources :locations, only: %i[index create]
 
   # ヘルスチェック
   get "up" => "rails/health#show", as: :rails_health_check
-
-  # 開発用
-  get 'home/index' if Rails.env.development?
 end

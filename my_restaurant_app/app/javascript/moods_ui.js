@@ -90,7 +90,7 @@ document.addEventListener('turbo:load', () => {
         },
         body: JSON.stringify({ 
           mood_id: moodId,
-          restaurant_types: restaurantTypes  // 🆕 レストランタイプも送信
+          restaurant_types: restaurantTypes  // レストランタイプも送信
         })
       })
       .then(response => response.json())
