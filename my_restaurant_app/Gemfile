@@ -3,67 +3,52 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.1.4"
 
-# Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.3", ">= 7.0.3.1"
 
-# The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
+# Asset pipeline
 gem "sprockets-rails"
 
-# Use postgresql as the database for Active Record
+# PostgreSQL
 gem "pg", "~> 1.1"
 
-# Use the Puma web server [https://github.com/puma/puma]
+# Web server
 gem "puma", ">= 5.0"
 
-# Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
+# JavaScript
 gem "importmap-rails"
-
-# Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 gem "turbo-rails"
-
-# Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "stimulus-rails"
 
-# Build JSON APIs with ease [https://github.com/rails/jbuilder]
+# JSON builder
 gem "jbuilder"
 
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+# Windows timezone
 gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 
-# Reduces boot times through caching; required in config/boot.rb
+# Boot speed
 gem "bootsnap", require: false
 
-# gem 'sass-rails', '>= 6'
-# Use Sass to process CSS
+# CSS (Bootstrap用)
 gem "sassc-rails", "~> 2.1"
 
-# Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
-
-# ===================================
-# アプリケーション固有のGem
-# ===================================
-gem 'devise'                    # ユーザー認証
+# =========================
+# アプリ固有
+# =========================
+gem "devise"
 gem "bootstrap", "~> 5.3"
-gem 'geocoder'                  # 位置情報・地図機能
+gem "geocoder"
 gem "dotenv-rails"
 
 group :development, :test do
-  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
 end
 
 group :development do
-  # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+  gem "letter_opener"
 end
 
 group :test do
-  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
-end
-
-group :development do
-  gem 'letter_opener'
 end
