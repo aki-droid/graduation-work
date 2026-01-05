@@ -1,12 +1,12 @@
-#class MoodsController < ApplicationController
+class MoodsController < ApplicationController
   # ========================================
   # ✅ MVP機能
   # ======================================== 
 
-# 気分選択画面
-  #def index
-    #@moods = Mood.all
- #end
+  # 気分選択画面
+  def index
+    @moods = Mood.all
+ end
 
   # 気分を選択する処理
   #def select
@@ -27,4 +27,4 @@
       #render json: { success: false, error: '気分が見つかりません' }, status: :not_found
     #end
   #end
-#end
+end
