@@ -10,5 +10,8 @@ pin_all_from "app/javascript/controllers", under: "controllers"
 pin "bootstrap", to: "https://ga.jspm.io/npm:bootstrap@5.3.2/dist/js/bootstrap.esm.js"
 pin "@popperjs/core", to: "https://ga.jspm.io/npm:@popperjs/core@2.11.8/lib/index.js"
 
-# 位置情報 JS
+# カスタムJS
 pin "location", to: "location.js"
+pin "moods_ui", to: "moods_ui.js"
+pin "restaurant_search", to: "restaurant_search.js"
+pin "map", to: "map.js"
