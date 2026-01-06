@@ -33,3 +33,5 @@
 # Ignore environment variable files
 .env
 .env.*
+
+/config/credentials/production.key
