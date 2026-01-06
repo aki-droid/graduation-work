@@ -1,6 +1,6 @@
 console.log('📍 location.js loaded');
 
-import { searchRestaurants } from '.restaurant_search';
+import { searchRestaurants } from 'restaurant_search';
 
 let initialized = false;
 let userTriggeredSearch = false;
