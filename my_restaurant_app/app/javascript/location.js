@@ -265,7 +265,7 @@ function renderResults(restaurants) {
     container.innerHTML = `
       <div class="alert alert-info text-center">
         <i class="fas fa-info-circle me-2"></i>
-        周辺にレストランが見つかりませんでした
+        条件に合うお店が見つかりませんでした
       </div>`;
     return;
   }
