@@ -1,0 +1,6 @@
+ja:
+  devise:
+    sessions:
+      signed_out: "再度ログインしてください。"
+      user:
+        signed_out: "再度ログインしてください。"
