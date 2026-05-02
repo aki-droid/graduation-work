@@ -5,10 +5,10 @@ import "controllers"
 // ============================
 // カスタム JavaScript
 // ============================
-import "location"
-import "moods_ui"
-import "restaurant_search"
-import "map"
+import "./location"
+import "./moods_ui"
+import "./restaurant_search"
+import "./map"
 
 // ============================
 // Bootstrap
