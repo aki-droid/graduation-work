@@ -8,7 +8,7 @@ import "controllers"
 import "location"
 import "moods_ui"
 import "restaurant_search"
-import "map"
+//import "map"
 
 // ============================
 // Bootstrap
