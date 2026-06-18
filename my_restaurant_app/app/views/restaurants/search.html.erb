@@ -197,6 +197,20 @@
                     <%= link_to "詳細を見る",
                         restaurant_path(restaurant),
                         class: "btn btn-primary btn-sm" %>
+                    
+                    <% if current_user %>
+                      <%= button_to "★ お気に入り",
+                          favorites_path,
+                          method: :post,
+                          params: {
+                            favorite: {
+                              place_id: restaurant.id,
+                              name: restaurant.name,
+                              address: restaurant.address
+                            }
+                          }, 
+                          class: "btn btn-outline-danger btn-sm" %>
+                    <% end %>
                   </div>
                 </div>
               </div>

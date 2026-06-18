@@ -321,9 +321,24 @@ function renderResults(restaurants) {
         </div>
 
         <div class="card-footer bg-white text-center">
+
+          ${window.isLoggedIn ? `
+            <button
+              class="btn btn-outline-warning btn-sm favorite-btn mb-2"
+              data-place-id="${r.placeId}"
+              data-name="${r.name}"
+              data-address="${r.address}"
+              data-rating="${r.rating || ''}">
+              ⭐ お気に入り
+            </button>
+
+            <br>
+            
+            ` : ''}
+
           <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.name)}"
-             target="_blank"
-             class="btn btn-outline-primary btn-sm">
+              target="_blank"
+              class="btn btn-outline-primary btn-sm">
             <i class="fas fa-map-marked-alt me-1"></i>Googleマップで見る
           </a>
         </div>
@@ -334,6 +349,40 @@ function renderResults(restaurants) {
   });
 
   container.appendChild(row);
+
+  document.querySelectorAll('.favorite-btn').forEach(button => {
+    button.addEventListener('click', async () => {
+
+      const data = {
+        favorite: {
+          place_id: button.dataset.placeId,
+          name: button.dataset.name,
+          address: button.dataset.address,
+          rating: button.dataset.rating
+        }
+      };
+
+      const response = await fetch('/favorites', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document
+            .querySelector('meta[name="csrf-token"]')
+            .content
+        },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+            
+      if (result.success) {
+        alert("お気に入りに追加しました");
+      } else {
+        alert(result.message || "すでに登録されています");
+      }
+    });
+  });
+
   console.log('✅ 描画完了');
 }
 

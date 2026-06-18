@@ -51,6 +51,10 @@
       });
     </script>
 
+    <script>
+      window.isLoggedIn = <%= user_signed_in? ? 'true' : 'false' %>;
+    </script>
+
     <%= javascript_importmap_tags %>
   </head>
 

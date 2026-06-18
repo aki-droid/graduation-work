@@ -6,18 +6,18 @@ default: &default
 development:
   <<: *default
   database: my_restaurant_app_development
-  username: aki
+  username: postgres
   password: password
   host: localhost
-  port: 5433
+  port: 5432
 
 test:
   <<: *default
   database: my_restaurant_app_test
-  username: aki
+  username: postgres
   password: password
   host: localhost
-  port: 5433
+  port: 5432
 
 production:
   <<: *default

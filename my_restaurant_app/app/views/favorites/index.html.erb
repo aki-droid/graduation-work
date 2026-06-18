@@ -1,0 +1,53 @@
+<div class="container mt-4">
+  <h2 class="mb-4">
+    ⭐ お気に入り一覧
+  </h2>
+
+  <% if @favorites.any? %>
+    <div class="row">
+      <% @favorites.each do |favorite| %>
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card h-100">
+
+            <div class="card-body">
+              <h5 class="card-title">
+                <%= favorite.name %>
+              </h5>
+
+              <% if favorite.rating.present? %>
+                <span class="badge bg-warning text-dark">
+                  ★ <%= favorite.rating %>
+                </span>
+              <% end %>
+
+              <p class="text-muted mt-2">
+                <%= favorite.address %>
+              </p>
+            </div>
+
+            <div class="card-footer bg-white">
+              <%= button_to "🗑️ 削除",
+                  favorite_path(favorite),
+                  method: :delete,
+                  class: "btn btn-danger btn-sm w-100",
+                  form: {
+                    data: {
+                      turbo: false
+                    }
+                  },
+                  onclick: "return confirm('お気に入りから削除しますか？')" %>
+            </div>
+
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+  <% else %>
+
+    <div class="alert alert-info">
+      お気に入りはまだありません
+    </div>
+
+  <% end %>
+</div>
