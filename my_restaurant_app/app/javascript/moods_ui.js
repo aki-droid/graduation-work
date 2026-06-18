@@ -2,54 +2,27 @@ console.log("😊 moods_ui.js loaded");
 
 // 気分とレストランタイプのマッピング
 const moodMapping = {
-  1: [ // 元気
-    'restaurant',
-    'cafe'
-  ],
-
-  2: [ // 疲れた
-    'restaurant',
-    'cafe'
-  ],
-
-  3: [ // おちこんでいる
-    'cafe',
-    'bakery',
-    'restaurant'
-  ],
-
-  4: [ // がっつり食べたい
-    'restaurant',
-    'meal_takeaway'
-  ],
-
-  5: [ // 軽く済ませたい
-    'meal_takeaway',
-    'cafe',
-    'restaurant'
-  ],
-
-  6: [ // おしゃれしたい
-    'restaurant',
-    'bar',
-    'night_club'
-  ],
-
-  7: [ // ワイワイしたい
-    'bar',
-    'restaurant',
-    'night_club'
-  ],
-
-  8: [ // まったりしたい
-    'cafe',
-    'bakery'
-  ]
+  1: ['restaurant', 'cafe'],
+  2: ['restaurant', 'cafe'],
+  3: ['cafe', 'bakery', 'restaurant'],
+  4: ['restaurant', 'meal_takeaway'],
+  5: ['meal_takeaway', 'cafe', 'restaurant'],
+  6: ['restaurant', 'bar', 'night_club'],
+  7: ['bar', 'restaurant', 'night_club'],
+  8: ['cafe', 'bakery']
 };
 
-document.addEventListener('turbo:load', () => {
+// Turbo二重バインド防止
+let initialized = false;
+
+function initMoodUI() {
+  if (initialized) return;
+  initialized = true;
+
   const moodCards = document.querySelectorAll('.mood-card');
-  const searchButton = document.getElementById('search-by-mood');
+  const searchButton = document.getElementById('search-button'); // ★修正ここ
+
+  console.log("initMoodUI:", moodCards.length);
 
   // ページ読み込み時に保存された気分を復元
   const savedMood = localStorage.getItem('selectedMood');
@@ -60,67 +33,66 @@ document.addEventListener('turbo:load', () => {
     }
   }
 
-  // 気分カードをクリックした時の処理
+  // 気分カードクリック
   moodCards.forEach(card => {
     card.addEventListener('click', () => {
-      // 他のカードの選択を解除
-      moodCards.forEach(c => c.classList.remove('selected'));
 
-      // クリックされたカードを選択状態に
+      moodCards.forEach(c => c.classList.remove('selected'));
       card.classList.add('selected');
 
-      // 選択された気分のIDを取得
-      const moodId = card.dataset.moodId;
+      const moodId = Number(card.dataset.moodId); // ★修正（重要）
 
-      // ローカルストレージに保存
       localStorage.setItem('selectedMood', moodId);
 
-      // 🆕 レストランタイプをローカルストレージに保存
-      const restaurantTypes = moodMapping[moodId];
+      const restaurantTypes = moodMapping[moodId] || [];
       localStorage.setItem('restaurantTypes', JSON.stringify(restaurantTypes));
-      console.log(`😊 気分ID: ${moodId}`);
-      console.log(`😊 レストランタイプ: ${restaurantTypes.join(', ')}`);
 
-      // サーバーに送信
+      console.log('😊 気分ID:', moodId);
+      console.log('🍽️ レストランタイプ:', restaurantTypes);
+
       fetch('/moods/select', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content
+          'X-CSRF-Token': document.querySelector('[name="csrf-token"]')?.content
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           mood_id: moodId,
-          restaurant_types: restaurantTypes  // レストランタイプも送信
+          restaurant_types: restaurantTypes
         })
       })
-      .then(response => response.json())
+      .then(r => r.json())
       .then(data => {
         if (data.success) {
-          console.log('✅ 気分を保存しました:', data.mood);
-          console.log('✅ レストランタイプ:', restaurantTypes);
+          console.log('✅ 保存成功');
         } else {
           console.error('❌ エラー:', data.error);
         }
       })
-      .catch(error => {
-        console.error('❌ 通信エラー:', error);
-      });
+      .catch(err => console.error('❌ 通信エラー:', err));
     });
   });
 
-  // 検索ボタンをクリックした時の処理
+  // 検索ボタン
   if (searchButton) {
     searchButton.addEventListener('click', (e) => {
       const selectedMood = localStorage.getItem('selectedMood');
+
       if (!selectedMood) {
         e.preventDefault();
         alert('気分を選択してください');
-      } else {
-        const restaurantTypes = localStorage.getItem('restaurantTypes');
-        console.log('🔍 検索開始');
-        console.log('😊 選択された気分:', selectedMood);
-        console.log('🍽️ レストランタイプ:', restaurantTypes);
+        return;
       }
+
+      const restaurantTypes = localStorage.getItem('restaurantTypes');
+
+      console.log('🔍 検索開始');
+      console.log('😊 気分:', selectedMood);
+      console.log('🍽️ タイプ:', restaurantTypes);
     });
   }
-});
+}
+
+// Turbo対応 + 初回ロード対応
+document.addEventListener('DOMContentLoaded', initMoodUI);
+document.addEventListener('turbo:load', initMoodUI);

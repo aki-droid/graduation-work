@@ -122,7 +122,7 @@ export async function searchRestaurants(
 
   const request = {
     textQuery: config.keywords.join(' '),
-    fields: ['displayName', 'location', 'rating', 'formattedAddress', 'photos'],
+    fields: ['id', 'displayName', 'location', 'rating', 'formattedAddress', 'photos'],
     locationBias: {
       center: { lat: lat, lng: lng },
       radius: radius,
@@ -221,6 +221,9 @@ export async function searchRestaurants(
           // 正規化処理
           // ========================================
           const normalizedPlaces = filteredPlaces.map(place => {
+            console.log("Placeデータ", place);
+            console.log("Place ID", place.id);
+            
             // displayNameの処理
             let name = '店名不明';
             if (place.displayName) {
@@ -260,6 +263,7 @@ export async function searchRestaurants(
             }
 
             return {
+              placeId: place.id,
               name: name,
               latitude: placeLatitude,
               longitude: placeLongitude,
@@ -267,11 +271,13 @@ export async function searchRestaurants(
               address: place.formattedAddress || '住所情報なし',
               photoUrl: photoUrl,
               // 元のデータも保持(デバッグ用)
-              _raw: place
             };
           });
 
           console.log('🔄 正規化後のデータ:', normalizedPlaces);
+          normalizedPlaces.forEach(place => {
+            console.log('⭐ placeId:', place.placeId);
+          });
 
           return normalizedPlaces; // ← 正規化後のデータを返す!
 

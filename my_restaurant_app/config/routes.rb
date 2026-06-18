@@ -36,6 +36,9 @@ Rails.application.routes.draw do
     end
   end
 
+  # お気に入り
+  resources :favorites, only: [:index, :create, :destroy]
+
   # 位置情報
   resources :locations, only: %i[index create]
 

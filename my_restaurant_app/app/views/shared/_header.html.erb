@@ -23,6 +23,14 @@
         </li>
 
         <% if user_signed_in? %>
+          <li class="nav-item">
+            <%= link_to "⭐ お気に入り",
+              favorites_path,
+              class: "nav-link" %>
+          </li>
+        <% end %>
+
+        <% if user_signed_in? %>
           <!-- ログイン中ユーザーのドロップダウン -->
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
