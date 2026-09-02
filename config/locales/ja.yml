@@ -9,6 +9,10 @@ ja:
         password: パスワード
         password_confirmation: パスワード確認
         current_password: 現在のパスワード
+      contact:
+        name: お名前
+        email: メールアドレス
+        message: お問い合わせ内容
 
   errors:
     format: "%{attribute}%{message}"

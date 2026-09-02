@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   get 'terms',   to: 'pages#terms'
   get 'privacy', to: 'pages#privacy'
   get 'contact', to: 'pages#contact'
+  post 'contact', to: 'pages#create_contact'
 
   # 気分選択
   resources :moods, only: [:index] do
