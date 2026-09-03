@@ -52,3 +52,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "resend", "~> 1.1"

@@ -1,0 +1,9 @@
+<h2>きぶんご飯にお問い合わせが届きました</h2>
+
+<p><strong>お名前：</strong><%= @contact.name %></p>
+
+<p><strong>メールアドレス：</strong><%= @contact.email %></p>
+
+<p><strong>お問い合わせ内容：</strong></p>
+
+<p><%= simple_format(@contact.message) %></p>
