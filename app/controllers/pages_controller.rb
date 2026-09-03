@@ -15,6 +15,7 @@ class PagesController < ApplicationController
     @contact = Contact.new(contact_params)
 
     if @contact.save
+      ContactMailer.received_email(@contact).deliver_now
       redirect_to contact_path, notice: "お問い合わせを送信しました。"
     else
       render :contact, status: :unprocessable_entity
